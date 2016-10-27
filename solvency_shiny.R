@@ -11,7 +11,9 @@ ui <- fluidPage(
   
   )
 
-server <- function(input, output) {}
+server <- function(input, output) {
+  output$hist <- renderPlot({ hist(rnorm(100)) })
+}
 
 shinyApp(ui = ui, server = server)
 
