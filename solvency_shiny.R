@@ -1,4 +1,5 @@
 library(shiny)
+library(ggplot2)
 
 ui <- fluidPage(
   
@@ -12,7 +13,10 @@ ui <- fluidPage(
   )
 
 server <- function(input, output) {
-  output$hist <- renderPlot({ hist(rnorm(100)) })
+  output$hist <- renderPlot({ 
+    ggplot(cars, aes(x = speed, y = dist)) +
+             geom_point()
+    })
 }
 
 shinyApp(ui = ui, server = server)
