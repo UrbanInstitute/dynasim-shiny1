@@ -1,12 +1,19 @@
 library(shiny)
-library(ggplot2)
+library(tidyverse)
 library(reshape2)
+library(extrafont)
+library(grid)
+library(RColorBrewer)
+
+Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
+
+# Source file for Windows
+source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R')
 
 solvency <- read.csv("solvency.csv", header = TRUE)
 
-
-
-
+solvency1 <- select(solvency, year, scheduled) 
+solvency.m1 <- melt(solvency1, id = 1)
 
 
 
@@ -21,25 +28,27 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   
-  data <- eventReactive(input$scheduled, {
+  rv <- reactiveValues(data = solvency.m1)
+  
+  observeEvent(input$scheduled, {
     solvency <-  select(solvency, year, scheduled) 
-    solvency.m <- melt(solvency, id = 1)
+    rv$data <- melt(solvency, id = 1)
   })
   
-  data <- eventReactive(input$mia, {
+  observeEvent(input$mia, {
     solvency <-  select(solvency, year, mini.pia)
-    solvency.m <- melt(solvency, id = 1)
+    rv$data <- melt(solvency, id = 1)
   })
   
-  data <- eventReactive(input$mia, {
+  observeEvent(input$tax.ssb, {
     solvency <-  select(solvency, year, tax.ssb)
-    solvency.m <- melt(solvency, id = 1)
+    rv$data <- melt(solvency, id = 1)
   })
   
   output$hist <- renderPlot({ 
    
     # Build graphic
-    ggplot(data(), aes(x = year, y = value, colour = variable)) +
+    ggplot(rv$data, aes(x = year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
       ggtitle("Social Security Income/Benefit Ratio for Scheduled Benefits")
