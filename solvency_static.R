@@ -27,13 +27,3 @@ ggplot(solvency.m, aes(x = year, y = value, colour = variable)) +
   geom_line(size = 1) +
   scale_y_continuous(expand = c(0,0)) +
   ggtitle("Social Security Income/Benefit Ratio for Scheduled Benefits")
-
-
-
-
-ggplot(economics_long, aes(date, value01, colour = variable)) +
-geom_line() +
-scale_y_continuous(expand = c(0,0)) +
-ggtitle('Example line chart')
-
-
