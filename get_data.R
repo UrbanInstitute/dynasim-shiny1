@@ -1,6 +1,11 @@
 # Aaron Williams, Urban Institute Program on Retirement Policy
 
-# This script...
+# This script reads social security trust fund finance measures from simulations 
+# of the Bipartisan Policy Center's reforms located at 
+# "X:\programs\run912\BPCtabs\Final Spreadsheets\TrustFundSummaryBPC.xlsx".
+# The script also cleans the data and then takes the dataframes of BPC options
+# which contain measures and turns them into data frames of measures that 
+# BPC options. It outputs .csv files. 
 
 # Library and Source Statements
 library(readxl)
@@ -22,7 +27,8 @@ readr <- function(sheetnum) {
 
   temp.xl <- temp.xl %>%
     filter(row_number() > 2 & row_number() < 86) %>%
-    select(-contains("na"))
+    select(-contains("na")) %>%
+    mutate_all(funs(as.numeric))
 
   names(temp.xl) <- gsub("\\.\\.", ".", names(temp.xl))
   names(temp.xl) <- gsub("\\.$", "", names(temp.xl))  
@@ -31,6 +37,27 @@ readr <- function(sheetnum) {
 
   return(temp.xl)
 }
+
+combiner <- function(output, var.name) {
+  
+  output <- data_frame(calendar.year = 2005:2087)
+  
+  for (i in 1:18) {
+    
+    temp <- dfs[[i]]
+    
+    temp <- select_(temp, var.name)   
+    
+    names(temp) <- bpc.options[i]
+    
+    output <- cbind(output, temp)
+  }
+  
+  return(tbl_df(output))
+  
+}
+
+# Executed statements
 
 # Create a vector with the 18 different BPC options
 bpc.options <- c("scheduled", "payable", "mini.pia", "tax.ssb", "cap.spouse", 
@@ -43,7 +70,7 @@ bpc.options <- c("scheduled", "payable", "mini.pia", "tax.ssb", "cap.spouse",
 links <- paste0(bpc.options, ".csv")
 links <- paste0("csv_files\\", links)
 
-# Fun the function on the 18 different excel sheets
+# Run the function on the 18 different excel sheets
 scheduled <- readr(1)             
 payable <- readr(2)
 mini.pia <- readr(3)
@@ -63,64 +90,18 @@ notaxmax <- readr(16)
 fica14 <- readr(17)
 fica15 <- readr(18)
 
-
 # Create a list of the 18 data frames
 dfs <- list(scheduled, payable, mini.pia, tax.ssb, cap.spouse, survivor.js75,
              taxmax90, taxmax90.fica13.4, fica13.4, cola.chaincpi, reduce.cola,
              increase.fra, increase.fra.era, taxmax150000, taxmax180000, 
              notaxmax, fica14, fica15)
 
-
-
-
-combiner <- function(option, var.name) {
-
-  option <- data_frame(calendar.year = 2005:2087)
+# Create data frame with individual variable from each BPC option
+trustfund <- combiner(trustfund, "trust.fund.ratio")
+cost.payroll <- combiner(cost.payroll, "cost.taxable.payroll")
+solvency <- combiner(solvency, "income.cost")
   
-  for (i in 1:18) {
-    
-    temp <- dfs[[i]]
-    
-    temp <- select_(temp, var.name)   
-    
-    names(temp) <- bpc.options[i]
-    
-    output <- cbind(output, temp)
-  }
-  
-  return(tbl_df(output))
-
-}
-  
-  
-combiner(trustfund, "trust.fund.ratio")
-  
-  
-
-
-
-
-
-
-# Trust Fund Ratio
-trustfund <- data_frame(calendar.year = 2005:2087)
-for (i in 1:18) {
-  
-  temp <- dfs[[i]]
-  
-  temp <- select(temp, trust.fund.ratio)   
-  
-  names(temp) <- bpc.options[i]
-  
-  trustfund <- cbind(trustfund, temp)
-  
-}
-
-
-
-
-
-
-
-
-
+# Write the data to .csv file
+write.csv(trustfund, "data//trust_fund_ratio.csv", row.names = FALSE)
+write.csv(cost.payroll, "data//cost_payroll.csv", row.names = FALSE)
+write.csv(solvency, "data//solvency.csv", row.names = FALSE)
