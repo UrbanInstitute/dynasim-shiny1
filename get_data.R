@@ -1,7 +1,17 @@
+# Aaron Williams, Urban Institute Program on Retirement Policy
+
+# This script...
+
+# Library and Source Statements
 library(readxl)
 library(tidyverse)
 
+# Function Definition
 readr <- function(sheetnum) {
+  # purpose
+  # Args:
+  #   sheetnum: sheet number in "TrustFundSummaryBPC.xlsx"
+  # Returns: Clean data frame
   
   temp.xl <- read_excel("X:\\programs\\run912\\BPCtabs\\Final Spreadsheets\\TrustFundSummaryBPC.xlsx",
                           sheet = sheetnum, 
@@ -11,7 +21,7 @@ readr <- function(sheetnum) {
   names(temp.xl) <- make.names(tolower(temp.xl[1, ]), unique = TRUE)
 
   temp.xl <- temp.xl %>%
-    filter(row_number() > 2 & row_number() < 85) %>%
+    filter(row_number() > 2 & row_number() < 86) %>%
     select(-contains("na"))
 
   names(temp.xl) <- gsub("\\.\\.", ".", names(temp.xl))
@@ -22,18 +32,19 @@ readr <- function(sheetnum) {
   return(temp.xl)
 }
 
+# Create a vector with the 18 different BPC options
 bpc.options <- c("scheduled", "payable", "mini.pia", "tax.ssb", "cap.spouse", 
                  "survivor.js75", "taxmax90", "taxmax90.fica13.4", "fica13.4", 
                  "cola.chaincpi", "reduce.cola", "increase.fra", 
                  "increase.fra.era", "taxmax150000", "taxmax180000", "notaxmax",
                  "fica14", "fica15")
 
+# Create links for writing the 18 BPC options to csv files
 links <- paste0(bpc.options, ".csv")
 links <- paste0("csv_files\\", links)
 
-
-
-scheduled <- readr(1)
+# Fun the function on the 18 different excel sheets
+scheduled <- readr(1)             
 payable <- readr(2)
 mini.pia <- readr(3)
 tax.ssb <- readr(4)
@@ -52,24 +63,58 @@ notaxmax <- readr(16)
 fica14 <- readr(17)
 fica15 <- readr(18)
 
-# 1  scheduled
-# 2  payable
-# 3  mini.pia
-# 4  tax.ssb
-# 5  cap.spouse
-# 6  survivor.js75
-# 7  taxmax90
-# 8  taxmax90.fica13.4
-# 9  fica13.4
-# 10 cola.chaincpi
-# 11 reduce.cola
-# 12 increase.fra
-# 13 increase.fra.era
-# 14 taxmax150000
-# 15 taxmax180000
-# 16 notaxmax
-# 17 fica14
-# 18 fica15
+
+# Create a list of the 18 data frames
+dfs <- list(scheduled, payable, mini.pia, tax.ssb, cap.spouse, survivor.js75,
+             taxmax90, taxmax90.fica13.4, fica13.4, cola.chaincpi, reduce.cola,
+             increase.fra, increase.fra.era, taxmax150000, taxmax180000, 
+             notaxmax, fica14, fica15)
+
+
+
+
+combiner <- function(option, var.name) {
+
+  option <- data_frame(calendar.year = 2005:2087)
+  
+  for (i in 1:18) {
+    
+    temp <- dfs[[i]]
+    
+    temp <- select_(temp, var.name)   
+    
+    names(temp) <- bpc.options[i]
+    
+    output <- cbind(output, temp)
+  }
+  
+  return(tbl_df(output))
+
+}
+  
+  
+combiner(trustfund, "trust.fund.ratio")
+  
+  
+
+
+
+
+
+
+# Trust Fund Ratio
+trustfund <- data_frame(calendar.year = 2005:2087)
+for (i in 1:18) {
+  
+  temp <- dfs[[i]]
+  
+  temp <- select(temp, trust.fund.ratio)   
+  
+  names(temp) <- bpc.options[i]
+  
+  trustfund <- cbind(trustfund, temp)
+  
+}
 
 
 
@@ -77,36 +122,5 @@ fica15 <- readr(18)
 
 
 
-
-
-
-scheduled <- read_excel("X:\\programs\\run912\\BPCtabs\\Final Spreadsheets\\TrustFundSummaryBPC.xlsx",
-                        sheet = 2, 
-                        col_names = FALSE,
-                        skip = 4)
-
-names(scheduled) <- make.names(tolower(scheduled[1, ]), unique = TRUE)
-
-
-scheduled <- scheduled %>%
-  filter(row_number() > 2 & row_number() < 85) %>%
-  select(-contains("na"))
-
-names(scheduled) <- gsub("\\.\\.", ".", names(scheduled))
-names(scheduled) <- gsub("\\.$", "", names(scheduled))  
-
-
-
-
-
-
-
-
-
-
-
-write.csv(, paste0())
-
-select(-na, -na.1, -NA., -NA..1, -NA..2, -NA..3, -na.2)
 
 
