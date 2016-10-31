@@ -12,9 +12,9 @@ Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
 source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R')
 
 # Load data
-solvency <- read.csv("solvency.csv", header = TRUE, stringsAsFactors = FALSE)
-cost.payroll <- read.csv("cost_payroll.csv", header = TRUE, stringsAsFactors = FALSE)
-trust.fund.ratio <- read.csv("trust_fund_ratio.csv", header = TRUE, stringsAsFactors = FALSE)
+solvency <- read.csv("data\\solvency.csv", header = TRUE, stringsAsFactors = FALSE)
+cost.payroll <- read.csv("data\\cost_payroll.csv", header = TRUE, stringsAsFactors = FALSE)
+trust.fund.ratio <- read.csv("data\\trust_fund_ratio.csv", header = TRUE, stringsAsFactors = FALSE)
 
 solvency.m <- tbl_df(melt(solvency, id = 1))
 cost.payroll.m <- tbl_df(melt(cost.payroll, id = 1))
@@ -28,18 +28,23 @@ ui <- fluidPage(
   sidebarPanel(selectInput(inputId = "option", 
               label = "Social Security Reform", 
               choices = c("Scheduled" = "scheduled", 
+                          "Payable" = "payable",
                           "Mini.PIA" = "mini.pia", 
                           "Tax SSB" = "tax.ssb",
                           "Cap Spouse" = "cap.spouse",
-                          "SurvivorJS75" = "survivorjs75",
-                          "90% Tax max and 13.4 FICA" = "tax.max.90.FICA.134",
-                          "Chained-CPI COLA" = "cola.chain.cpi",
+                          "SurvivorJS75" = "survivor.js75",
+                          "90% Tax max" = "taxmax90",
+                          "90% Tax max and 13.4 FICA" = "taxmax90.fica13.4",
+                          "13.4 FICA" = "fica13.4",
+                          "Chained-CPI COLA" = "cola.chaincpi",
                           "Reduce COLA" = "reduce.cola",
                           "Increase FRA" = "increase.fra",
                           "Increase ERA & FRA" = "increase.fra.era",
                           "Tax Max to $150,000" = "taxmax150000",
                           "Tax Max to $180,000" = "taxmax180000",
-                          "Eliminate the Tax Max" = "no.tax.max"))),
+                          "Eliminate the Tax Max" = "notaxmax",
+                          "14% FICA" = "fica14",
+                          "15% FICA" = "fica15"))),
 
   mainPanel(plotOutput("hist1"),
             plotOutput("hist2"),
@@ -54,7 +59,7 @@ server <- function(input, output) {
 
     solvency.m %>%
       filter(variable == "scheduled" | variable == input$option) %>%
-      ggplot(aes(x = year, y = value, colour = variable)) +
+      ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
       ggtitle("Social Security Income/Benefit Ratio") + 
@@ -68,7 +73,7 @@ server <- function(input, output) {
     
     cost.payroll.m %>%
       filter(variable == "scheduled" | variable == input$option) %>%
-      ggplot(aes(x = year, y = value, colour = variable)) +
+      ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
       ggtitle("Social Security Cost/Payroll Ratio") + 
@@ -82,7 +87,7 @@ server <- function(input, output) {
     
     trust.fund.ratio.m %>%
       filter(variable == "scheduled" | variable == input$option) %>%
-      ggplot(aes(x = year, y = value, colour = variable)) +
+      ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
       ggtitle("Social Security Trust Fund Ratio") +
