@@ -23,11 +23,12 @@ trust.fund.ratio.m <- tbl_df(melt(trust.fund.ratio, id = 1))
 ui <- fluidPage(
   
   titlePanel("Urban Analysis of BPC Social Security Reforms"),
-
-  sidebarLayout(
-  sidebarPanel(selectInput(inputId = "option", 
-              label = "Social Security Reform", 
-              choices = c("Scheduled" = "scheduled", 
+  
+  fluidRow(
+    column(4, 
+      selectInput(inputId = "option", 
+        label = "Social Security Reform", 
+        choices = c("Scheduled" = "scheduled", 
                           "Payable" = "payable",
                           "Mini.PIA" = "mini.pia", 
                           "Tax SSB" = "tax.ssb",
@@ -45,11 +46,18 @@ ui <- fluidPage(
                           "Eliminate the Tax Max" = "notaxmax",
                           "14% FICA" = "fica14",
                           "15% FICA" = "fica15"))),
+      br(),
 
-  mainPanel(plotOutput("hist1"),
-            plotOutput("hist2"),
-            plotOutput("hist3"))
-  ))
+    column(4,
+      plotOutput("hist1"))),
+  
+  fluidRow(
+    column(4, 
+      plotOutput("hist2")),
+           
+    column(4,
+      plotOutput("hist3")))
+  )
 
 server <- function(input, output) {
 
