@@ -28,8 +28,7 @@ ui <- fluidPage(
     column(4, 
       selectInput(inputId = "option", 
         label = "Social Security Reform", 
-        choices = c("Scheduled" = "scheduled", 
-                          "Payable" = "payable",
+        choices = c("Scheduled & Payable" = "scheduled", 
                           "Mini.PIA" = "mini.pia", 
                           "Tax SSB" = "tax.ssb",
                           "Cap Spouse" = "cap.spouse",
@@ -46,7 +45,6 @@ ui <- fluidPage(
                           "Eliminate the Tax Max" = "notaxmax",
                           "14% FICA" = "fica14",
                           "15% FICA" = "fica15"))),
-      br(),
 
     column(4,
       plotOutput("hist1"))),
@@ -66,11 +64,11 @@ server <- function(input, output) {
     # Build graphic
 
     solvency.m %>%
-      filter(variable == "scheduled" | variable == input$option) %>%
+      filter(variable == "scheduled" | variable == "payable" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
-      ggtitle("Social Security Income:Benefits Ratio") + 
+      ggtitle("Income:Benefits Ratio") + 
       ylim(-0.5, 1.5) +
       xlab("Calendar Year") +
       ylab("Income:Benfits Ratio")
@@ -82,11 +80,11 @@ server <- function(input, output) {
     # Build graphic
     
     cost.payroll.m %>%
-      filter(variable == "scheduled" | variable == input$option) %>%
+      filter(variable == "scheduled" | variable == "payable" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
-      ggtitle("Social Security Cost:Taxable Payroll Ratio") + 
+      ggtitle("Cost:Taxable Payroll Ratio") + 
       ylim(0, 0.3) +
       xlab("Calendar Year") +
       ylab("Cost:Taxable Payroll Ratio")
@@ -98,11 +96,11 @@ server <- function(input, output) {
     # Build graphic
     
     trust.fund.ratio.m %>%
-      filter(variable == "scheduled" | variable == input$option) %>%
+      filter(variable == "scheduled" | variable == "payable" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
-      ggtitle("Social Security Trust Fund Ratio") +
+      ggtitle("Trust Fund Ratio") +
       ylim(-2000, 500) +
       xlab("Calendar Year") +
       ylab("Trust Fund Ratio")
