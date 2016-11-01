@@ -3,7 +3,6 @@
 Karen Smith used DYNASIM to model many Social Security reforms for the Bipartisan Policy Center's Report of the Commission on Retirement Security and Personal Savings. These scripts pull data from trust fund summaries created by this analysis which are stored at "X:\programs\run912\BPCtabs\Final Spreadsheets\TrustFundSummaryBPC.xlsx" and build a basic shiny application for interactively visualizing the output.
 
 ## Scripts
----
 
 ### get_data.R
 
