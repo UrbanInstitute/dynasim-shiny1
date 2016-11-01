@@ -1,12 +1,12 @@
 # DYNASIM-shiny1
 
-Karen Smith used DYNASIM to model many Social Security reforms for the Bipartisan Policy Center's Report of the Commission on Retirement Security and Personal Savings. These scripts pull data from trust fund summaries created by this analysis which are stored at "X:\programs\run912\BPCtabs\Final Spreadsheets\TrustFundSummaryBPC.xlsx" and build a basic shiny application for interactively visualizing the output.
+Karen Smith used DYNASIM to model many Social Security reforms for the Bipartisan Policy Center's Report of the Commission on Retirement Security and Personal Savings. These scripts pull data from trust fund summaries created by this analysis which are stored at `X:\programs\run912\BPCtabs\Final Spreadsheets\TrustFundSummaryBPC.xlsx` and build a basic shiny application for interactively visualizing the output.
 
 ## Scripts
 
 ### get_data.R
 
-This script pulls and cleans data from the first eighteen sheets of "X:\programs\run912\BPCtabs\Final Spreadsheets\TrustFundSummaryBPC.xlsx". Each pages represents a BPC reform option and contains different measures of the financial health of Social Security. This script creates data frames for each measure of financial health which contain vectors for each BPC reform option and then writes those data frames to .csv files which can be found in the data folder. 
+This script pulls and cleans data from the first eighteen sheets of `X:\programs\run912\BPCtabs\Final Spreadsheets\TrustFundSummaryBPC.xlsx`. Each pages represents a BPC reform option and contains different measures of the financial health of Social Security. This script creates data frames for each measure of financial health which contain vectors for each BPC reform option and then writes those data frames to .csv files which can be found in the data folder. 
 
 ### solvency_shiny.R
 
