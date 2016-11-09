@@ -6,15 +6,21 @@ library(extrafont)
 library(grid)
 library(RColorBrewer)
 
-Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
+#Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
 
-# Urban theme for Windows
-source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R')
+# Source file for Windows
+#source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R')
+#source('urban_theme_windows.R')
+
+
+# Source file for Mac
+#source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R')
+source('urban_theme_for_mac.R')
 
 # Load data
-solvency <- read.csv("data\\solvency.csv", header = TRUE, stringsAsFactors = FALSE)
-cost.payroll <- read.csv("data\\cost_payroll.csv", header = TRUE, stringsAsFactors = FALSE)
-trust.fund.ratio <- read.csv("data\\trust_fund_ratio.csv", header = TRUE, stringsAsFactors = FALSE)
+solvency <- read.csv("data/solvency.csv", header = TRUE, stringsAsFactors = FALSE)
+cost.payroll <- read.csv("data/cost_payroll.csv", header = TRUE, stringsAsFactors = FALSE)
+trust.fund.ratio <- read.csv("data/trust_fund_ratio.csv", header = TRUE, stringsAsFactors = FALSE)
 
 solvency.m <- tbl_df(melt(solvency, id = 1))
 cost.payroll.m <- tbl_df(melt(cost.payroll, id = 1))
@@ -70,7 +76,7 @@ server <- function(input, output) {
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
-      ggtitle("Social Security Income:Benefits Ratio") + 
+      ggtitle("Income:Benefits Ratio") + 
       ylim(-0.5, 1.5) +
       xlab("Calendar Year") +
       ylab("Income:Benfits Ratio")
@@ -86,7 +92,7 @@ server <- function(input, output) {
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
-      ggtitle("Social Security Cost:Taxable Payroll Ratio") + 
+      ggtitle("Cost:Taxable Payroll Ratio") + 
       ylim(0, 0.3) +
       xlab("Calendar Year") +
       ylab("Cost:Taxable Payroll Ratio")
@@ -102,7 +108,7 @@ server <- function(input, output) {
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
-      ggtitle("Social Security Trust Fund Ratio") +
+      ggtitle("Trust Fund Ratio") +
       ylim(-2000, 500) +
       xlab("Calendar Year") +
       ylab("Trust Fund Ratio")
