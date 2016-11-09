@@ -15,7 +15,7 @@ library(RColorBrewer)
 
 # Source file for Mac
 #source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R')
-source('urban_theme_for_mac.R')
+source('urban_theme_mac.R')
 
 # Load data
 solvency <- read.csv("data/solvency.csv", header = TRUE, stringsAsFactors = FALSE)
