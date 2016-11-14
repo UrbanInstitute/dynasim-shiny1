@@ -1,19 +1,14 @@
 ## Libraries and Source Files
 library(shiny)
 library(tidyverse)
-library(reshape2)
 library(extrafont)
 library(grid)
 library(RColorBrewer)
 
-#devtools::install_github("hadley/ggplot2")
-
-#Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
-
 # Source file for Windows
+#Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
 #source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R')
 #source('urban_theme_windows.R')
-
 
 # Source file for Mac
 #source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R')
