@@ -8,11 +8,11 @@ library(RColorBrewer)
 # Source file for Windows
 #Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
 #source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R')
-#source('urban_theme_windows.R')
+#source('urban_institute_themes/urban_theme_windows.R')
 
 # Source file for Mac
 #source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R')
-source('urban_theme_mac.R')
+source('urban_institute_themes/urban_theme_mac.R')
 
 # Load data and gather data into long form for ggplot2
 solvency.m <- read_csv("data/solvency.csv") %>%
