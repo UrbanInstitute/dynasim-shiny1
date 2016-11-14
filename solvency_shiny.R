@@ -6,6 +6,8 @@ library(extrafont)
 library(grid)
 library(RColorBrewer)
 
+#devtools::install_github("hadley/ggplot2")
+
 #Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
 
 # Source file for Windows
@@ -72,7 +74,7 @@ server <- function(input, output) {
     # Build graphic
 
     solvency.m %>%
-      filter(variable == "scheduled" | variable == input$option) %>%
+      filter(variable == "scheduled" | variable == "payable" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
@@ -88,7 +90,7 @@ server <- function(input, output) {
     # Build graphic
     
     cost.payroll.m %>%
-      filter(variable == "scheduled" | variable == input$option) %>%
+      filter(variable == "scheduled" | variable == "payable" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
@@ -104,7 +106,7 @@ server <- function(input, output) {
     # Build graphic
     
     trust.fund.ratio.m %>%
-      filter(variable == "scheduled" | variable == input$option) %>%
+      filter(variable == "scheduled" | variable == "payable" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
