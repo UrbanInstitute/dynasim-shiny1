@@ -19,14 +19,13 @@ library(RColorBrewer)
 #source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R')
 source('urban_theme_mac.R')
 
-# Load data
-solvency <- read.csv("data/solvency.csv", header = TRUE, stringsAsFactors = FALSE)
-cost.payroll <- read.csv("data/cost_payroll.csv", header = TRUE, stringsAsFactors = FALSE)
-trust.fund.ratio <- read.csv("data/trust_fund_ratio.csv", header = TRUE, stringsAsFactors = FALSE)
-
-solvency.m <- tbl_df(melt(solvency, id = 1))
-cost.payroll.m <- tbl_df(melt(cost.payroll, id = 1))
-trust.fund.ratio.m <- tbl_df(melt(trust.fund.ratio, id = 1))
+# Load data and gather data into long form for ggplot2
+solvency.m <- read_csv("data/solvency.csv") %>%
+    gather(key = variable, value = value, -calendar.year)
+cost.payroll.m <- read_csv("data/cost_payroll.csv") %>%
+    gather(key = variable, value = value, -calendar.year)
+trust.fund.ratio.m <- read_csv("data/trust_fund_ratio.csv") %>%
+    gather(key = variable, value = value, -calendar.year)
 
 ui <- fluidPage(
   
@@ -36,24 +35,22 @@ ui <- fluidPage(
     column(4, 
       selectInput(inputId = "option", 
         label = "Social Security Reform", 
-        choices = c("Scheduled" = "scheduled", 
-                          "Payable" = "payable",
-                          "Mini.PIA" = "mini.pia", 
-                          "Tax SSB" = "tax.ssb",
-                          "Cap Spouse" = "cap.spouse",
-                          "SurvivorJS75" = "survivor.js75",
-                          "90% Tax max" = "taxmax90",
-                          "90% Tax max and 13.4 FICA" = "taxmax90.fica13.4",
-                          "13.4 FICA" = "fica13.4",
-                          "Chained-CPI COLA" = "cola.chaincpi",
-                          "Reduce COLA" = "reduce.cola",
-                          "Increase FRA" = "increase.fra",
-                          "Increase ERA & FRA" = "increase.fra.era",
-                          "Tax Max to $150,000" = "taxmax150000",
-                          "Tax Max to $180,000" = "taxmax180000",
-                          "Eliminate the Tax Max" = "notaxmax",
-                          "14% FICA" = "fica14",
-                          "15% FICA" = "fica15"))),
+        choices = c("Mini.PIA" = "mini.pia", 
+                    "Tax SSB" = "tax.ssb",
+                    "Cap Spouse" = "cap.spouse",
+                    "SurvivorJS75" = "survivor.js75",
+                    "90% Tax max" = "taxmax90",
+                    "90% Tax max and 13.4 FICA" = "taxmax90.fica13.4",
+                    "13.4 FICA" = "fica13.4",
+                    "Chained-CPI COLA" = "cola.chaincpi",
+                    "Reduce COLA" = "reduce.cola",
+                    "Increase FRA" = "increase.fra",
+                    "Increase ERA & FRA" = "increase.fra.era",
+                    "Tax Max to $150,000" = "taxmax150000",
+                    "Tax Max to $180,000" = "taxmax180000",
+                    "Eliminate the Tax Max" = "notaxmax",
+                    "14% FICA" = "fica14",
+                    "15% FICA" = "fica15"))),
       br(),
 
     column(4,
