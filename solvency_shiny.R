@@ -80,7 +80,8 @@ server <- function(input, output) {
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
-      ggtitle("Income:Benefits Ratio") + 
+      labs(title = "Income:Benefits Ratio",
+           caption = "DYNASIM4") + 
       ylim(-0.5, 1.5) +
       xlab("Calendar Year") +
       ylab("Income:Benfits Ratio")
@@ -96,7 +97,8 @@ server <- function(input, output) {
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
-      ggtitle("Cost:Taxable Payroll Ratio") + 
+      labs(title = "Cost:Taxable Payroll Ratio",
+           caption = "DYNASIM4") + 
       ylim(0, 0.3) +
       xlab("Calendar Year") +
       ylab("Cost:Taxable Payroll Ratio")
@@ -112,7 +114,8 @@ server <- function(input, output) {
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
-      ggtitle("Trust Fund Ratio") +
+      labs(title = "Trust Fund Ratio",
+           caption = "DYNASIM4") +
       ylim(-2000, 500) +
       xlab("Calendar Year") +
       ylab("Trust Fund Ratio")
