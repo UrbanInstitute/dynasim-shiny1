@@ -49,7 +49,10 @@ ui <- fluidPage(
       br(),
 
     column(4,
-      plotOutput("hist1"))),
+           style = "position:relative",
+           plotOutput("hist1",
+                      hover = hoverOpts("plot_hover", delay = 100, delayType = "debounce")),
+           uiOutput("hover_info"))),
   
   fluidRow(
     column(4, 
@@ -57,7 +60,8 @@ ui <- fluidPage(
            
     column(4,
       plotOutput("hist3")))
-  )
+ 
+)
 
 server <- function(input, output) {
 
@@ -68,7 +72,7 @@ server <- function(input, output) {
     solvency.m %>%
       filter(variable == "scheduled" | variable == "payable" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
-      geom_line(size = 1) +
+      geom_point(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
       ggtitle("Income:Benefits Ratio") + 
       ylim(-0.5, 1.5) +
@@ -107,6 +111,30 @@ server <- function(input, output) {
       xlab("Calendar Year") +
       ylab("Trust Fund Ratio")
     
+  })
+  
+  output$hover_info <- renderUI({
+    hover <- input$plot_hover
+    point <- nearPoints(solvency.m, hover, threshold = 5, maxpoints = 1, addDist = TRUE)
+    if (nrow(point) == 0) return(NULL)
+        
+    print(point)
+    
+    left_pct <- (hover$x - hover$domain$left) / (hover$domain$right - hover$domain$left)
+    top_pct <- (hover$domain$top - hover$y) / (hover$domain$top - hover$domain$bottom)
+    
+    left_px <- hover$range$left + left_pct * (hover$range$right - hover$range$left)
+    top_px <- hover$range$top + top_pct * (hover$range$bottom - hover$range$top)
+    
+    style <- paste0("position:absolute; z-index:100; background-color: rgba(245, 245, 245, 0.85); ",
+                    "left:", left_px + 2, "px; top:", top_px + 2, "px;")
+    
+    wellPanel(
+      style = style,
+      p(HTML(paste0("<b> Car: </b>", point$variable, "<br/>",
+                    "<b> hope : </b>", point$value, "<br/>",
+                    "<b> Distance from left </b>", left_px, "<b>, from top: </b>", top_px)))
+    )
   })
 }
 
