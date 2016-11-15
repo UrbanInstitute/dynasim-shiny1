@@ -16,11 +16,14 @@ source("urban_institute_themes/urban_theme_mac.R")
 
 # Load data and gather data into long form for ggplot2
 solvency.m <- read_csv("data/solvency.csv") %>%
-    gather(key = variable, value = value, -calendar.year)
+    gather(key = variable, value = value, -calendar.year) %>%
+    mutate(variable = factor(variable, unique(variable)))
 cost.payroll.m <- read_csv("data/cost_payroll.csv") %>%
-    gather(key = variable, value = value, -calendar.year)
+    gather(key = variable, value = value, -calendar.year) %>%
+    mutate(variable = factor(variable, unique(variable)))
 trust.fund.ratio.m <- read_csv("data/trust_fund_ratio.csv") %>%
-    gather(key = variable, value = value, -calendar.year)
+    gather(key = variable, value = value, -calendar.year) %>%
+    mutate(variable = factor(variable, unique(variable)))
 
 ui <- fluidPage(
   
