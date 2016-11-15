@@ -72,7 +72,7 @@ server <- function(input, output) {
     solvency.m %>%
       filter(variable == "scheduled" | variable == "payable" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
-      geom_point(size = 1) +
+      geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
       ggtitle("Income:Benefits Ratio") + 
       ylim(-0.5, 1.5) +
@@ -131,9 +131,8 @@ server <- function(input, output) {
     
     wellPanel(
       style = style,
-      p(HTML(paste0("<b> Car: </b>", point$variable, "<br/>",
-                    "<b> hope : </b>", point$value, "<br/>",
-                    "<b> Distance from left </b>", left_px, "<b>, from top: </b>", top_px)))
+      p(HTML(paste0("<b> Line: </b>", point$variable, "<br/>",
+                    "<b> Ratio: </b>", round(point$value, 2), "<br/>")))
     )
   })
 }
