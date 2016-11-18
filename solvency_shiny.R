@@ -150,8 +150,7 @@ server <- function(input, output) {
     # actual tooltip created as wellPanel
     wellPanel(
       style = style,
-      p(HTML(paste0("<b> Line: </b>", point$variable, "<br/>",
-                    "<b> Ratio: </b>", round(point$value, 2), "<br/>")))
+      p(HTML(paste0("<b> Ratio: </b>", round(point$value, 2), "<br/>")))
     )
   })
   
@@ -174,8 +173,7 @@ server <- function(input, output) {
     
     wellPanel(
       style = style,
-      p(HTML(paste0("<b> Line: </b>", point$variable, "<br/>",
-                    "<b> Ratio: </b>", round(point$value, 2), "<br/>")))
+      p(HTML(paste0("<b> Ratio: </b>", round(point$value, 2), "<br/>")))
     )
   })
   
@@ -198,8 +196,7 @@ server <- function(input, output) {
     
     wellPanel(
       style = style,
-      p(HTML(paste0("<b> Line: </b>", point$variable, "<br/>",
-                    "<b> Ratio: </b>", round(point$value, 2), "<br/>")))
+      p(HTML(paste0("<b> Ratio: </b>", round(point$value, 2), "<br/>")))
     )
   })
 }
