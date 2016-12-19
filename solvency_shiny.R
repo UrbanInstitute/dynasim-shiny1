@@ -85,11 +85,15 @@ server <- function(input, output) {
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
-      labs(title = "Income:Benefits Ratio",
-           caption = "DYNASIM4") + 
+      labs(title = "Income to Benefits Ratio") + 
       ylim(-0.5, 1.5) +
       xlab("Calendar Year") +
-      ylab("Income:Benfits Ratio")
+      ylab(NULL) +
+      theme(axis.ticks.length = unit(0, "points"),
+      axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
+                                                      unit = "pt",
+                                                      valid.unit = 8L,
+                                                      class = c("margin", "unit"))))
     
     })
   
@@ -102,11 +106,16 @@ server <- function(input, output) {
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(expand = c(0,0)) +
-      labs(title = "Cost:Taxable Payroll Ratio",
-           caption = "DYNASIM4") + 
+      labs(title = "Cost to Taxable Payroll Ratio",
+           caption = " ") + 
       ylim(0, 0.3) +
       xlab("Calendar Year") +
-      ylab("Cost:Taxable Payroll Ratio")
+      ylab(NULL) +
+      theme(axis.ticks.length = unit(0, "points"),
+            axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
+                                                          unit = "pt",
+                                                          valid.unit = 8L,
+                                                          class = c("margin", "unit"))))
     
   })
   
@@ -123,7 +132,12 @@ server <- function(input, output) {
            caption = "DYNASIM4") +
       ylim(-2000, 500) +
       xlab("Calendar Year") +
-      ylab("Trust Fund Ratio")
+      ylab(NULL) +
+      theme(axis.ticks.length = unit(0, "points"),
+      axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
+                                                      unit = "pt",
+                                                      valid.unit = 8L,
+                                                      class = c("margin", "unit"))))
     
   })
   
@@ -152,7 +166,9 @@ server <- function(input, output) {
     # actual tooltip created as wellPanel
     wellPanel(
       style = style,
-      p(HTML(paste0("<b> Ratio: </b>", round(point$value, 2), "<br/>")))
+      p(HTML(paste0("<b> Year:  </b>", point$calendar.year,"<br/>",
+                    "<b> Ratio: </b>", round(point$value, 2), "<br/>"
+                    )))
     )
   })
   
@@ -175,7 +191,9 @@ server <- function(input, output) {
     
     wellPanel(
       style = style,
-      p(HTML(paste0("<b> Ratio: </b>", round(point$value, 2), "<br/>")))
+      p(HTML(paste0("<b> Year:  </b>", point$calendar.year,"<br/>",
+                    "<b> Ratio: </b>", round(point$value, 2), "<br/>"
+                    )))
     )
   })
   
@@ -198,7 +216,9 @@ server <- function(input, output) {
     
     wellPanel(
       style = style,
-      p(HTML(paste0("<b> Ratio: </b>", round(point$value, 2), "<br/>")))
+      p(HTML(paste0("<b> Year:  </b>", point$calendar.year,"<br/>",
+                    "<b> Ratio: </b>", round(point$value, 2), "<br/>"
+                    )))
     )
   })
 }
