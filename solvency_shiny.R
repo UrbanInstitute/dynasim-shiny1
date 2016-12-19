@@ -4,6 +4,7 @@ library(tidyverse)
 library(extrafont)
 library(grid)
 library(RColorBrewer)
+library(scales)
 
 # Source file for Windows
 #Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
@@ -23,7 +24,8 @@ cost.payroll.m <- read_csv("data/cost_payroll.csv") %>%
     mutate(variable = factor(variable, unique(variable)))
 trust.fund.ratio.m <- read_csv("data/trust_fund_ratio.csv") %>%
     gather(key = variable, value = value, -calendar.year) %>%
-    mutate(variable = factor(variable, unique(variable)))
+    mutate(variable = factor(variable, unique(variable))) %>%
+    mutate(value = value / 100)
 
 ui <- fluidPage(
   
@@ -35,13 +37,12 @@ ui <- fluidPage(
     column(4, 
       selectInput(inputId = "option", 
         label = "Social Security Reform", 
-        choices = c("Mini.PIA" = "mini.pia", 
+        choices = c("Mini PIA" = "mini.pia", 
                     "Tax SSB" = "tax.ssb",
                     "Cap Spouse" = "cap.spouse",
                     "SurvivorJS75" = "survivor.js75",
-                    "90% Tax max" = "taxmax90",
-                    "90% Tax max and 13.4 FICA" = "taxmax90.fica13.4",
-                    "13.4 FICA" = "fica13.4",
+                    "90% Tax Max" = "taxmax90",
+                    "90% Tax Max and 13.4 FICA" = "taxmax90.fica13.4",
                     "Chained-CPI COLA" = "cola.chaincpi",
                     "Reduce COLA" = "reduce.cola",
                     "Increase FRA" = "increase.fra",
@@ -49,6 +50,7 @@ ui <- fluidPage(
                     "Tax Max to $150,000" = "taxmax150000",
                     "Tax Max to $180,000" = "taxmax180000",
                     "Eliminate the Tax Max" = "notaxmax",
+                    "13.4 FICA" = "fica13.4",
                     "14% FICA" = "fica14",
                     "15% FICA" = "fica15"))),
       br(),
@@ -71,73 +73,80 @@ ui <- fluidPage(
            plotOutput("hist3",
                       hover = hoverOpts("plot_hover3", delay = 100, delayType = "debounce")),
            uiOutput("hover_info3")))
- 
 )
 
 server <- function(input, output) {
 
   output$hist1 <- renderPlot({ 
    
-    # Build graphic
-
     solvency.m %>%
       filter(variable == "scheduled" | variable == "payable" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
-      geom_line(size = 1) +
-      scale_y_continuous(expand = c(0,0)) +
+      geom_line(size = 1, position = position_dodge(width = 2)) +
+      scale_y_continuous(expand = c(0, 0)) +
       labs(title = "Income to Benefits Ratio") + 
       ylim(-0.5, 1.5) +
       xlab("Calendar Year") +
       ylab(NULL) +
       theme(axis.ticks.length = unit(0, "points"),
       axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
-                                                      unit = "pt",
-                                                      valid.unit = 8L,
-                                                      class = c("margin", "unit"))))
+                                                     unit = "pt",
+                                                     valid.unit = 8L,
+                                                     class = c("margin", "unit"))),
+      axis.text.y = element_text(margin = structure(c(0, 2, 0, 0),
+                                                     unit = "pt",
+                                                     valid.unit = 8L,
+                                                     class = c("margin", "unit"))),
+      legend.box.margin = margin(6, 0, 0, 0, "points"))
     
     })
   
   output$hist2 <- renderPlot({ 
     
-    # Build graphic
-    
     cost.payroll.m %>%
       filter(variable == "scheduled" | variable == "payable" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
-      geom_line(size = 1) +
-      scale_y_continuous(expand = c(0,0)) +
+      geom_line(size = 1, position = position_dodge(width = 2)) +
+      scale_y_continuous(limits = c(0, 0.31), expand = c(0, 0)) +
       labs(title = "Cost to Taxable Payroll Ratio",
            caption = " ") + 
-      ylim(0, 0.3) +
       xlab("Calendar Year") +
       ylab(NULL) +
       theme(axis.ticks.length = unit(0, "points"),
             axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
                                                           unit = "pt",
                                                           valid.unit = 8L,
-                                                          class = c("margin", "unit"))))
+                                                          class = c("margin", "unit"))),
+            axis.text.y = element_text(margin = structure(c(0, 2, 0, 0),
+                                                          unit = "pt",
+                                                          valid.unit = 8L,
+                                                          class = c("margin", "unit"))),
+            legend.box.margin = margin(6, 0, 0, 0, "points"))
     
   })
   
   output$hist3 <- renderPlot({ 
-    
-    # Build graphic
-    
+
     trust.fund.ratio.m %>%
       filter(variable == "scheduled" | variable == "payable" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
-      geom_line(size = 1) +
-      scale_y_continuous(expand = c(0,0)) +
+      geom_line(size = 1, position = position_dodge(width = 2)) +
       labs(title = "Trust Fund Ratio",
            caption = "DYNASIM4") +
       ylim(-2000, 500) +
       xlab("Calendar Year") +
       ylab(NULL) +
+      scale_y_continuous(expand = c(0.3, 0), labels = scales::percent) +
       theme(axis.ticks.length = unit(0, "points"),
       axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
                                                       unit = "pt",
                                                       valid.unit = 8L,
-                                                      class = c("margin", "unit"))))
+                                                      class = c("margin", "unit"))),
+      axis.text.y = element_text(margin = structure(c(0, 2, 0, 0),
+                                                    unit = "pt",
+                                                    valid.unit = 8L,
+                                                    class = c("margin", "unit"))),
+      legend.box.margin = margin(6, 0, 0, 0, "points"))
     
   })
   
