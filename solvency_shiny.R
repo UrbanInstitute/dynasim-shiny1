@@ -27,6 +27,8 @@ trust.fund.ratio.m <- read_csv("data/trust_fund_ratio.csv") %>%
 
 ui <- fluidPage(
   
+  theme = "shiny.css",
+    
   titlePanel("Urban Analysis of BPC Social Security Reforms"),
   
   fluidRow(
