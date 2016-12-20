@@ -31,7 +31,7 @@ ui <- fluidPage(
   
   theme = "shiny.css",
     
-  titlePanel("Urban Analysis of BPC Social Security Reforms"),
+  titlePanel("Urban Institute Analysis of BPC Social Security Reforms"),
   
   fluidRow(
     column(4, 
@@ -52,7 +52,11 @@ ui <- fluidPage(
                     "Eliminate the Tax Max" = "notaxmax",
                     "13.4 FICA" = "fica13.4",
                     "14% FICA" = "fica14",
-                    "15% FICA" = "fica15"))),
+                    "15% FICA" = "fica15")),
+      
+      # Explanation of Social Security Reform
+      textOutput("text1")),
+      
       br(),
 
     column(4,
@@ -149,6 +153,58 @@ server <- function(input, output) {
       legend.box.margin = margin(6, 0, 0, 0, "points"))
     
   })
+  
+  # Explanation of Social Security Reform
+  output$text1 <- renderText({
+      
+      if (input$option == "mini.pia") {}
+      else if (input$option == "tax.ssb") {"Increases the taxation of 
+          Social Security benefits"}
+      else if (input$option == "cap.spouse") {"Caps the spouse benefit for 
+          claimants who turn 60 in 2020 at $1121.68 in 2016. Indexed the cap
+          annually by chained CPI."}
+      else if (input$option == "survivor.js75") {}
+      else if (input$option == "taxmax90") {"Raises the cap on annual earnings 
+          subject to the Social Security payroll tax and that enter the benefits
+          calculation to cover 90 percent of payroll. This increase is phased in
+          over 10 years, beginning in 2016."}
+      else if (input$option == "taxmax90.fica13.4") {"Raises the cap on annual 
+            earnings subject to the Social Security payroll tax and that enter the benefits
+          calculation to cover 90 percent of payroll. This increase is phased in
+          over 10 years, beginning in 2016. Also, increase the payroll tax to 
+          13.4% over t10 years beginning in 2016."}
+      else if (input$option == "cola.chaincpi") {"Ties beneficiaries' annual 
+          cost-of-living-adjustment (COLA) to the change in the chained
+          consumer price index (C-CPI-U), which grows more slowly than the 
+          standard CPI-U now used to compute COLAs. (Only those NRA or older)"}
+      else if (input$option == "reduce.cola") {"Ties beneficiaries' annual 
+          cost-of-living-adjustment (COLA) to the change in the chained
+          consumer price index (C-CPI-U), which grows more slowly than the 
+          standard CPI-U now used to compute COLAs. (All beneficiaries including
+          those under the NRA)"}
+      else if (input$option == "increase.fra") {"Indefinitely raises Social 
+          Security's FRA (now set at 67 beginning in 2022) and the age for 
+          receiving delayed retirement credits by one month every two years, 
+          beginning in 2024."}
+      else if (input$option == "increase.fra.era") {"Raises Social Security's 
+          early eligibility age (EEA), which is now set at 62, and indefinitely 
+           raises Social Security's FRA (now set at 67 beginning in 2022) and 
+          the age for receiving delayed retirement credits by one month every two years, 
+          beginning in 2024."}
+      else if (input$option == "taxmax150000") {"Increase the tax cap to 
+          $150,000 between 2016 and 2018 and then increase the tax cap by wage
+          growth plus 0.5 percentage points thereafter."}
+      else if (input$option == "taxmax180000") {"Increase the tax cap to 
+          $180,000 between 2016 and 2018 and then increase the tax cap by wage
+          growth plus 0.5 percentage points thereafter."}
+      else if (input$option == "notaxmax") {""}
+      else if (input$option == "fica13.4") {"Increase the payroll tax rate to 
+          13.4% over 10 years beginning in 2016."}
+      else if (input$option == "fica14") {"Increase the payroll tax rate to 
+          14.4% over 10 years beginning in 2016."}
+      else if (input$option == "fica15") {"Increase the payroll tax rate to 
+          15.4% over 10 years beginning in 2016."}
+      })
   
   # Chart 1
   output$hover_info1 <- renderUI({
