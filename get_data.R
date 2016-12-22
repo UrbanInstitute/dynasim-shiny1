@@ -53,6 +53,28 @@ combiner <- function(output, var.name) {
     output <- cbind(output, temp)
   }
   
+  output <- output %>%
+    gather(key = variable, value = value, -calendar.year) %>%
+    mutate(variable = ifelse(variable == "scheduled", "Scheduled Law", variable)) %>%
+    mutate(variable = ifelse(variable == "payable", "Payable Law", variable)) %>%
+    mutate(variable = ifelse(variable == "mini.pia", "Annual PIA", variable)) %>%
+    mutate(variable = ifelse(variable == "tax.ssb", "Increase Benefits Taxation", variable)) %>%
+    mutate(variable = ifelse(variable == "cap.spouse", "Cap Spouse Benefits", variable)) %>%
+    mutate(variable = ifelse(variable == "survivor.js75", "75% Survivor Benefit", variable)) %>%
+    mutate(variable = ifelse(variable == "taxmax90", "90% Tax Max", variable)) %>%
+    mutate(variable = ifelse(variable == "taxmax90.fica13.4", "90% Tax Max and 13.4% Payroll Tax", variable)) %>%
+    mutate(variable = ifelse(variable == "fica13.4", "13.4% Payroll Tax", variable)) %>%
+    mutate(variable = ifelse(variable == "cola.chaincpi", "Full Chained-CPI COLA", variable)) %>%
+    mutate(variable = ifelse(variable == "reduce.cola", "Partial Chained-CPI COLA", variable)) %>%
+    mutate(variable = ifelse(variable == "increase.fra", "Increase FRA", variable)) %>%
+    mutate(variable = ifelse(variable == "increase.fra.era", "Increase FRA and EEA", variable)) %>%
+    mutate(variable = ifelse(variable == "taxmax150000", "$150,000 Tax Max", variable)) %>%
+    mutate(variable = ifelse(variable == "taxmax180000", "$180,000 Tax Max", variable)) %>%
+    mutate(variable = ifelse(variable == "notaxmax", "Eliminate the Tax Max", variable)) %>%
+    mutate(variable = ifelse(variable == "fica14", "14.4% Payroll Tax", variable)) %>%
+    mutate(variable = ifelse(variable == "fica15", "15.4% Payroll Tax", variable)) %>%
+    mutate(variable = ifelse(variable == "bpc.package", "BPC Package", variable))
+  
   return(tbl_df(output))
   
 }
@@ -98,11 +120,11 @@ dfs <- list(scheduled, payable, mini.pia, tax.ssb, cap.spouse, survivor.js75,
              notaxmax, fica14, fica15, bpc.package)
 
 # Create data frame with individual variable from each BPC option
-trustfund <- combiner(trustfund, "trust.fund.ratio")
+trust.fund.ratio <- combiner(trust.fund.ratio, "trust.fund.ratio")
 cost.payroll <- combiner(cost.payroll, "cost.taxable.payroll")
 solvency <- combiner(solvency, "income.cost")
   
 # Write the data to .csv file
-write_csv(trustfund, "data//trust_fund_ratio.csv")
+write_csv(trust.fund.ratio, "data//trust_fund_ratio.csv")
 write_csv(cost.payroll, "data//cost_payroll.csv")
 write_csv(solvency, "data//solvency.csv")
