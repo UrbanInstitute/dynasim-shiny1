@@ -56,7 +56,7 @@ ui <- fluidPage(
                     "15% FICA" = "fica15")),
       
       # Explanation of Social Security Reform
-      textOutput("text1")),
+      htmlOutput("text1")),
       
       br(),
 
@@ -87,7 +87,7 @@ server <- function(input, output) {
     solvency.m %>%
       filter(variable == "scheduled" | variable == "payable" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
-      geom_line(size = 1, position = position_dodge(width = 2)) +
+      geom_line(size = 1) +
       scale_y_continuous(expand = c(0, 0)) +
       labs(title = "Income to Benefits Ratio") + 
       ylim(-0.5, 1.5) +
@@ -111,7 +111,7 @@ server <- function(input, output) {
     cost.payroll.m %>%
       filter(variable == "scheduled" | variable == "payable" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
-      geom_line(size = 1, position = position_dodge(width = 2)) +
+      geom_line(size = 1) +
       scale_y_continuous(limits = c(0, 0.31), expand = c(0, 0)) +
       labs(title = "Cost to Taxable Payroll Ratio",
            caption = " ") + 
@@ -135,7 +135,7 @@ server <- function(input, output) {
     trust.fund.ratio.m %>%
       filter(variable == "scheduled" | variable == "payable" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
-      geom_line(size = 1, position = position_dodge(width = 2)) +
+      geom_line(size = 1) +
       labs(title = "Trust Fund Ratio",
            caption = "DYNASIM4") +
       ylim(-2000, 500) +
@@ -158,53 +158,88 @@ server <- function(input, output) {
   # Explanation of Social Security Reform
   output$text1 <- renderText({
       
-      if (input$option == "mini.pia") {}
+      if (input$option == "bpc.package") {"<br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> Beyond 2087"}
+      else if (input$option == "mini.pia") {"<br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2033"}
       else if (input$option == "tax.ssb") {"Increases the taxation of 
-          Social Security benefits"}
+          Social Security benefits <br/> <br/> 
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2033"}
       else if (input$option == "cap.spouse") {"Caps the spouse benefit for 
           claimants who turn 60 in 2020 at $1121.68 in 2016. Indexed the cap
-          annually by chained CPI."}
-      else if (input$option == "survivor.js75") {}
+          annually by chained CPI. <br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2034"}
+      else if (input$option == "survivor.js75") {"<br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2034"}
       else if (input$option == "taxmax90") {"Raises the cap on annual earnings 
           subject to the Social Security payroll tax and that enter the benefits
           calculation to cover 90 percent of payroll. This increase is phased in
-          over 10 years, beginning in 2016."}
+          over 10 years, beginning in 2016. <br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2041"}
       else if (input$option == "taxmax90.fica13.4") {"Raises the cap on annual 
             earnings subject to the Social Security payroll tax and that enter the benefits
           calculation to cover 90 percent of payroll. This increase is phased in
           over 10 years, beginning in 2016. Also, increase the payroll tax to 
-          13.4% over t10 years beginning in 2016."}
+          13.4% over t10 years beginning in 2016. <br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2060"}
       else if (input$option == "cola.chaincpi") {"Ties beneficiaries' annual 
           cost-of-living-adjustment (COLA) to the change in the chained
           consumer price index (C-CPI-U), which grows more slowly than the 
-          standard CPI-U now used to compute COLAs. (Only those NRA or older)"}
+          standard CPI-U now used to compute COLAs. (Only those NRA or older) <br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2035"}
       else if (input$option == "reduce.cola") {"Ties beneficiaries' annual 
           cost-of-living-adjustment (COLA) to the change in the chained
           consumer price index (C-CPI-U), which grows more slowly than the 
           standard CPI-U now used to compute COLAs. (All beneficiaries including
-          those under the NRA)"}
+          those under the NRA) <br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2035"}
       else if (input$option == "increase.fra") {"Indefinitely raises Social 
           Security's FRA (now set at 67 beginning in 2022) and the age for 
           receiving delayed retirement credits by one month every two years, 
-          beginning in 2024."}
+          beginning in 2024. <br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2034"}
       else if (input$option == "increase.fra.era") {"Raises Social Security's 
           early eligibility age (EEA), which is now set at 62, and indefinitely 
            raises Social Security's FRA (now set at 67 beginning in 2022) and 
           the age for receiving delayed retirement credits by one month every two years, 
-          beginning in 2024."}
+          beginning in 2024. <br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2034"}
       else if (input$option == "taxmax150000") {"Increase the tax cap to 
           $150,000 between 2016 and 2018 and then increase the tax cap by wage
-          growth plus 0.5 percentage points thereafter."}
+          growth plus 0.5 percentage points thereafter. <br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2035"}
       else if (input$option == "taxmax180000") {"Increase the tax cap to 
           $180,000 between 2016 and 2018 and then increase the tax cap by wage
-          growth plus 0.5 percentage points thereafter."}
-      else if (input$option == "notaxmax") {""}
+          growth plus 0.5 percentage points thereafter. <br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2036"}
+      else if (input$option == "notaxmax") {"<br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2055"}
       else if (input$option == "fica13.4") {"Increase the payroll tax rate to 
-          13.4% over 10 years beginning in 2016."}
+          13.4% over 10 years beginning in 2016. <br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2039"}
       else if (input$option == "fica14") {"Increase the payroll tax rate to 
-          14.4% over 10 years beginning in 2016."}
+          14.4% over 10 years beginning in 2016. <br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> 2052"}
       else if (input$option == "fica15") {"Increase the payroll tax rate to 
-          15.4% over 10 years beginning in 2016."}
+          15.4% over 10 years beginning in 2016. <br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> Beyond 2087"}
       })
   
   # Chart 1
@@ -222,7 +257,6 @@ server <- function(input, output) {
     left_px <- hover$range$left + left_pct * (hover$range$right - hover$range$left)
     top_px <- hover$range$top + top_pct * (hover$range$bottom - hover$range$top)
     
-    #TODO(awunderground): change CSS colors of pop-up
     # create style property fot tooltip
     # background color is set so tooltip is a bit transparent
     # z-index is set so we are sure are tooltip will be on top
