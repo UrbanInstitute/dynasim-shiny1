@@ -7,13 +7,13 @@ library(RColorBrewer)
 library(scales)
 
 # Source file for Windows
-#Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
+Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
 #source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R")
-#source("urban_institute_themes/urban_theme_windows.R")
+source("urban_institute_themes/urban_theme_windows.R")
 
 # Source file for Mac
 #source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R")
-source("urban_institute_themes/urban_theme_mac.R")
+#source("urban_institute_themes/urban_theme_mac.R")
 
 # Load data and gather data into long form for ggplot2
 solvency.m <- read_csv("data/solvency.csv") %>%
@@ -37,7 +37,8 @@ ui <- fluidPage(
     column(4, 
       selectInput(inputId = "option", 
         label = "Social Security Reform", 
-        choices = c("BPC Package" = "bpc.package",
+        choices = c("Scheduled Law and Payable Law" = "NULL",
+                    "BPC Package" = "bpc.package",
                     "Mini PIA" = "mini.pia", 
                     "Tax SSB" = "tax.ssb",
                     "Cap Spouse" = "cap.spouse",
@@ -238,6 +239,9 @@ server <- function(input, output) {
           <strong>Insolvency Year:</strong> 2052"}
       else if (input$option == "fica15") {"Increase the payroll tax rate to 
           15.4% over 10 years beginning in 2016. <br/> <br/>
+          <strong>Actuarial Deficit:</strong> <br/> <br/>
+          <strong>Insolvency Year:</strong> Beyond 2087"}
+      else {"Current Law Scheduled and Current Law Payable <br/> <br/>
           <strong>Actuarial Deficit:</strong> <br/> <br/>
           <strong>Insolvency Year:</strong> Beyond 2087"}
       })
