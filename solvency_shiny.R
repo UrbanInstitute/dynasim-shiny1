@@ -155,90 +155,90 @@ server <- function(input, output) {
   output$text1 <- renderText({
       
       if (input$option == "BPC Package") {"<br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> Beyond 2087"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to $0.03 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> increases from 2034 to beyond 2087."}
       else if (input$option == "Annual PIA") {"<br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2033"}
+          <strong>Open Group Unfunded Obligation</strong> increases from -$10.59 trillion to -$14.19 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> decreases from 2034 to 2033."}
       else if (input$option == "Increase Benefits Taxation") {"Increases the taxation of 
           Social Security benefits <br/> <br/> 
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2033"}
+          <strong>Open Group Unfunded Obligation</strong> increases from -$10.59 trillion to -$10.93 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> remains unchaged at 2034."}
       else if (input$option == "Cap Spouse Benefits") {"Caps the spouse benefit for 
-          claimants who turn 60 in 2020 at $1121.68 in 2016. Indexed the cap
+          claimants who turn 60 in 2020 at $1,121.68 in 2016. Indexed the cap
           annually by chained CPI. <br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2034"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$9.94 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> remains unchanged at 2034."}
       else if (input$option == "75% Survivor Benefit") {"<br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2034"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$9.48 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> remains unchanged at 2034."}
       else if (input$option == "90% Tax Max") {"Raises the cap on annual earnings 
           subject to the Social Security payroll tax and that enter the benefits
           calculation to cover 90 percent of payroll. This increase is phased in
           over 10 years, beginning in 2016. <br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2041"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$6.97 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> increases from 2034 to 2042."}
       else if (input$option == "90% Tax Max and 13.4% Payroll Tax") {"Raises the cap on annual 
             earnings subject to the Social Security payroll tax and that enter the benefits
           calculation to cover 90 percent of payroll. This increase is phased in
           over 10 years, beginning in 2016. Also, increase the payroll tax to 
           13.4% over t10 years beginning in 2016. <br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2060"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$3.09 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> increases from 2034 to 2059."}
       else if (input$option == "Full Chained-CPI COLA") {"Ties beneficiaries' annual 
           cost-of-living-adjustment (COLA) to the change in the chained
           consumer price index (C-CPI-U), which grows more slowly than the 
           standard CPI-U now used to compute COLAs. (Only those NRA or older) <br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2035"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.41 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> increases from 2034 to 2035."}
       else if (input$option == "Partial Chained-CPI COLA") {"Ties beneficiaries' annual 
           cost-of-living-adjustment (COLA) to the change in the chained
           consumer price index (C-CPI-U), which grows more slowly than the 
           standard CPI-U now used to compute COLAs. (All beneficiaries including
           those under the NRA) <br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2035"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.72 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> increases from 2034 to 2035."}
       else if (input$option == "Increase FRA") {"Indefinitely raises Social 
           Security's FRA (now set at 67 beginning in 2022) and the age for 
           receiving delayed retirement credits by one month every two years, 
           beginning in 2024. <br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2034"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.69 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> remains unchanged at 2034."}
       else if (input$option == "Increase FRA and EEA") {"Raises Social Security's 
           early eligibility age (EEA), which is now set at 62, and indefinitely 
            raises Social Security's FRA (now set at 67 beginning in 2022) and 
           the age for receiving delayed retirement credits by one month every two years, 
           beginning in 2024. <br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2034"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.62 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> remains unchanged at 2034."}
       else if (input$option == "$150,000 Tax Max") {"Increase the tax cap to 
           $150,000 between 2016 and 2018 and then increase the tax cap by wage
           growth plus 0.5 percentage points thereafter. <br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2035"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$9.32 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> increases from 2034 to 2035."}
       else if (input$option == "$180,000 Tax Max") {"Increase the tax cap to 
           $180,000 between 2016 and 2018 and then increase the tax cap by wage
           growth plus 0.5 percentage points thereafter. <br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2036"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.76 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> increases from 2034 to 2036."}
       else if (input$option == "Eliminate the Tax Max") {"<br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2055"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$4.63 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> increases from 2034 to 2055."}
       else if (input$option == "13.4% Payroll Tax") {"Increase the payroll tax rate to 
           13.4% over 10 years beginning in 2016. <br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2039"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$7.05 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> increases from 2034 to 2039."}
       else if (input$option == "14.4% Payroll Tax") {"Increase the payroll tax rate to 
           14.4% over 10 years beginning in 2016. <br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2052"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$3.53 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> increases from 2034 to 2052."}
       else if (input$option == "15.4% Payroll Tax") {"Increase the payroll tax rate to 
           15.4% over 10 years beginning in 2016. <br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> Beyond 2087"}
+          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$0.046 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> increases from 2034 to 2087."}
       else {"Current Law Scheduled and Current Law Payable <br/> <br/>
-          <strong>Actuarial Deficit:</strong> <br/> <br/>
-          <strong>Insolvency Year:</strong> 2034"}
+          <strong>Open Group Unfunded Obligation</strong> is -$10.59 trillion.<br/> <br/>
+          <strong>Insolvency Year</strong> is 2034."}
       })
   
   # Chart 1
