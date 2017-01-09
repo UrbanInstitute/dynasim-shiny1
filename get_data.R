@@ -18,7 +18,7 @@ readr <- function(sheetnum, linknum) {
   #   sheetnum: sheet number in "TrustFundSummaryBPC.xlsx"
   # Returns: Clean data frame
   
-  temp.xl <- read_excel("X:\\programs\\run912\\BPCtabs\\Final Spreadsheets\\TrustFundSummaryBPC.xlsx",
+  temp.xl <- read_excel("X:\\programs\\run912\\BPCtabs\\Final Spreadsheets\\TrustFundSummaryBPC_actuarial_deficit.xlsx",
                           sheet = sheetnum, 
                           col_names = FALSE,
                           skip = 4)
@@ -32,6 +32,8 @@ readr <- function(sheetnum, linknum) {
 
   names(temp.xl) <- gsub("\\.\\.", ".", names(temp.xl))
   names(temp.xl) <- gsub("\\.$", "", names(temp.xl))  
+  
+  temp.xl <- select(temp.xl, calendar.year, trust.fund.ratio, cost.taxable.payroll, income.cost)
   
   write.csv(temp.xl, links[linknum])
 
@@ -93,7 +95,7 @@ links <- paste0(bpc.options, ".csv")
 links <- paste0("csv_files\\", links)
 
 # Run the function on the 19 different excel sheets
-scheduled <- readr(1, 1)            
+scheduled <- readr(1, 1)      
 payable <- readr(2, 2)
 mini.pia <- readr(3, 3)
 tax.ssb <- readr(4, 4)
@@ -111,7 +113,7 @@ taxmax180000 <- readr(15, 15)
 notaxmax <- readr(16, 16)
 fica14 <- readr(17, 17)
 fica15 <- readr(18, 18)
-bpc.package <- readr(24, 19)
+bpc.package <- readr(19, 19)
 
 # Create a list of the 19 data frames
 dfs <- list(scheduled, payable, mini.pia, tax.ssb, cap.spouse, survivor.js75,
@@ -125,6 +127,6 @@ cost.payroll <- combiner(cost.payroll, "cost.taxable.payroll")
 solvency <- combiner(solvency, "income.cost")
   
 # Write the data to .csv file
-write_csv(trust.fund.ratio, "data//trust_fund_ratio.csv")
-write_csv(cost.payroll, "data//cost_payroll.csv")
-write_csv(solvency, "data//solvency.csv")
+#write_csv(trust.fund.ratio, "data//trust_fund_ratio.csv")
+#write_csv(cost.payroll, "data//cost_payroll.csv")
+#write_csv(solvency, "data//solvency.csv")
