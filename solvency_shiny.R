@@ -27,9 +27,21 @@ trust.fund.ratio <- read_csv("data/trust_fund_ratio.csv") %>%
 ui <- fluidPage(
   
   theme = "shiny.css",
-    
-  titlePanel("Urban Institute Analysis of BPC Social Security Reforms"),
   
+  fluidRow(
+  
+    column(8,
+           
+           titlePanel("Exploring Social Security Reform Options"),
+           
+           p("The Social Security trustees project that, by the mid-2030s, the system will no longer be able to pay all scheduled benefits. Which reform option should policymakers pursue to help balance the system?
+             Use our interactive tool to compare how different groups would fare, over time, under the following policy options."),
+           HTML("<p>Explore <b>the trust fund</b>, by income, by demographics, and <a href='http://www.urban.org/policy-centers/cross-center-initiatives/program-retirement-policy/projects/dynasim-projecting-older-americans-future-well-being/detailed-projections-older-population-through-2065'>the data</a></p>"),
+           
+           br()
+           )
+  ),
+
   fluidRow(
     column(4, 
       selectInput(inputId = "option", 
@@ -75,7 +87,20 @@ ui <- fluidPage(
            style = "position:relative",
            plotOutput("hist3",
                       hover = hoverOpts("plot_hover3", delay = 100, delayType = "debounce")),
-           uiOutput("hover_info3")))
+           uiOutput("hover_info3"))),
+  
+  fluidRow(
+    column(8,
+           h3("Understand the Metrics"),
+           HTML("<p><b>Income to Benefits Ratio:</b> The income to benefits ratio measures the adequacy of current OASDI trust fund income to cover current costs and benefits. It is total OASDI income from payroll taxes, taxation of benefits, general fund transfers, and interest divided by the total cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries.</p>"),  
+           HTML("<p>When the ratio is one, the Social Security Administration spends one dollar for every dollar it collects or earns from interest. When the ratio is above one, the SSA brings in more money than it spends and the combined OASDI trust fund grows. When the ratio is below one, the SSA brings in less money than it spends and the combined OASDI trust fund shrinks.</p>"),
+           HTML("<p><b>Annual Cost Rate:</b> The annual cost rate is a measure of the total cost of the OASDI programs compared to all of the taxable earnings in the economy. It is the cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries relative to taxable payroll for the year.  The ratio is projected to grow in the coming years because the baby-boom generation will increase the number of beneficiaries much faster than the number of workers increases.</p>"),
+           HTML("<p><b>Trust Fund Ratio:</b> Trust fund ratios measure the percentage of a year’s costs that could be covered solely with money from the combined OASDI trust fund. They are the combined OASDI trust fund asset reserves at the beginning of a year expressed as a percentage of the total cost for the year.  A positive trust fund ratio means the combined OASDI trust fund was solvent in the prior year.</p>"),
+           HTML("<p>Trust fund ratios are also important for assessing the long-term solvency of the combined OASDI trust fund. If the projected trust fund ratio is positive through the 75-year valuation period and is either level or increasing at the end of the period, then the trust fund is 'sustainably solvent.'</p>"),
+           HTML("<p><b>Insolvency Year:</b> The insolvency year is the projected year when the combined OASDI trust fund will no longer be able to pay scheduled benefits in full on a timely basis.  The combined OASDI trust fund is currently expected to turn insolvent in 2034.</p>"),
+           HTML("<p><b>Open Group Unfunded Obligation:</b> The open group unfunded obligation is a measure of the total shortfall (or surplus) of the OASDI trust fund over a valuation period in present value dollars.  It is present value non-interest income over the valuation period and starting trust fund asset reserves, minus the present value total costs of the OASDI program. The measure is in present value dollars because an additional dollar saved or earned in any given year has more time to accrue interest as special public-debt obligations in the combined OASDI trust funds than an additional dollar in a later year.</p>")   
+    )
+  )
 )
 
 server <- function(input, output) {
@@ -154,91 +179,79 @@ server <- function(input, output) {
   # Explanation of Social Security Reform
   output$text1 <- renderText({
       
-      if (input$option == "BPC Package") {"<br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to $0.03 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> increases from 2034 to beyond 2087."}
-      else if (input$option == "Annual PIA") {"<br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> increases from -$10.59 trillion to -$14.19 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> decreases from 2034 to 2033."}
-      else if (input$option == "Increase Benefits Taxation") {"Increases the taxation of 
-          Social Security benefits <br/> <br/> 
-          <strong>Open Group Unfunded Obligation</strong> increases from -$10.59 trillion to -$10.93 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> remains unchaged at 2034."}
-      else if (input$option == "Cap Spouse Benefits") {"Caps the spouse benefit for 
-          claimants who turn 60 in 2020 at $1,121.68 in 2016. Indexed the cap
-          annually by chained CPI. <br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$9.94 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> remains unchanged at 2034."}
-      else if (input$option == "75% Survivor Benefit") {"<br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$9.48 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> remains unchanged at 2034."}
-      else if (input$option == "90% Tax Max") {"Raises the cap on annual earnings 
-          subject to the Social Security payroll tax and that enter the benefits
-          calculation to cover 90 percent of payroll. This increase is phased in
-          over 10 years, beginning in 2016. <br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$6.97 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> increases from 2034 to 2042."}
-      else if (input$option == "90% Tax Max and 13.4% Payroll Tax") {"Raises the cap on annual 
-            earnings subject to the Social Security payroll tax and that enter the benefits
-          calculation to cover 90 percent of payroll. This increase is phased in
-          over 10 years, beginning in 2016. Also, increase the payroll tax to 
-          13.4% over t10 years beginning in 2016. <br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$3.09 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> increases from 2034 to 2059."}
-      else if (input$option == "Full Chained-CPI COLA") {"Ties beneficiaries' annual 
-          cost-of-living-adjustment (COLA) to the change in the chained
-          consumer price index (C-CPI-U), which grows more slowly than the 
-          standard CPI-U now used to compute COLAs. (Only those NRA or older) <br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.41 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> increases from 2034 to 2035."}
-      else if (input$option == "Partial Chained-CPI COLA") {"Ties beneficiaries' annual 
-          cost-of-living-adjustment (COLA) to the change in the chained
-          consumer price index (C-CPI-U), which grows more slowly than the 
-          standard CPI-U now used to compute COLAs. (All beneficiaries including
-          those under the NRA) <br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.72 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> increases from 2034 to 2035."}
-      else if (input$option == "Increase FRA") {"Indefinitely raises Social 
-          Security's FRA (now set at 67 beginning in 2022) and the age for 
-          receiving delayed retirement credits by one month every two years, 
-          beginning in 2024. <br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.69 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> remains unchanged at 2034."}
-      else if (input$option == "Increase FRA and EEA") {"Raises Social Security's 
-          early eligibility age (EEA), which is now set at 62, and indefinitely 
-           raises Social Security's FRA (now set at 67 beginning in 2022) and 
-          the age for receiving delayed retirement credits by one month every two years, 
-          beginning in 2024. <br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.62 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> remains unchanged at 2034."}
-      else if (input$option == "$150,000 Tax Max") {"Increase the tax cap to 
-          $150,000 between 2016 and 2018 and then increase the tax cap by wage
-          growth plus 0.5 percentage points thereafter. <br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$9.32 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> increases from 2034 to 2035."}
-      else if (input$option == "$180,000 Tax Max") {"Increase the tax cap to 
-          $180,000 between 2016 and 2018 and then increase the tax cap by wage
-          growth plus 0.5 percentage points thereafter. <br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.76 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> increases from 2034 to 2036."}
-      else if (input$option == "Eliminate the Tax Max") {"<br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$4.63 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> increases from 2034 to 2055."}
-      else if (input$option == "13.4% Payroll Tax") {"Increase the payroll tax rate to 
-          13.4% over 10 years beginning in 2016. <br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$7.05 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> increases from 2034 to 2039."}
-      else if (input$option == "14.4% Payroll Tax") {"Increase the payroll tax rate to 
-          14.4% over 10 years beginning in 2016. <br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$3.53 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> increases from 2034 to 2052."}
-      else if (input$option == "15.4% Payroll Tax") {"Increase the payroll tax rate to 
-          15.4% over 10 years beginning in 2016. <br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$0.046 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> increases from 2034 to 2087."}
-      else {"Current Law Scheduled and Current Law Payable <br/> <br/>
-          <strong>Open Group Unfunded Obligation</strong> is -$10.59 trillion.<br/> <br/>
-          <strong>Insolvency Year</strong> is 2034."}
+      if (input$option == "BPC Package") {"<p>Annual PIA, limit spousal benefits, replace the WEP and GPO with a proportional reduction in OASI benefits based on covered earnings, enhance survivor benefits, increase the progressivity of the benefit formula, increase Social Security tax max to $195,000, payroll tax to 13.4% and FRA to 69, switch to C-CPI-U for COLAs, end 'claim-and-suspend' games, create a basic minimum benefit for all individuals above the FRA eligible for Social Security, and tax 100 percent of Social Security benefits for beneficiaries with annual incomes above $250,000.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to $0.03 trillion.</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to beyond 2087.</p>"}
+      
+      else if (input$option == "Annual PIA") {"<p>Eliminates the preferential treatment of workers with short careers by applying Social Security’s progressive benefit formula to the 40 highest years of wage-indexed earnings divided by 37 rather than applying the formula to total wage-indexed earnings received in the top 35 years. It also makes the benefit formula more progressive. This begins with OASI claimants who attain age 62 in 2022.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> increases from -$10.59 trillion to -$14.19 trillion.</p>
+          <p><strong>Insolvency Year</strong> decreases from 2034 to 2033.</p>"}
+      
+      else if (input$option == "Increase Benefits Taxation") {"<p>Increases the taxation of 
+          Social Security benefits </p>
+          <p><strong>Open Group Unfunded Obligation</strong> increases from -$10.59 trillion to -$10.93 trillion.</p>
+          <p><strong>Insolvency Year</strong> remains unchaged at 2034.</p>"}
+      
+      else if (input$option == "Cap Spouse Benefits") {"<p>Caps the spouse benefit at $1,121.68 in 2016 beginning for claimants who turn 60 in 2020 and beyond. Indexes the cap annually by chained CPI-U.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$9.94 trillion.</p>
+          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>"}
+      
+      else if (input$option == "75% Survivor Benefit") {"<p>Increases joint-and-survivors benefits to 75 percent of combined benefits for the couple, from 50 percent of combined benefits, for claimants who turn 62 in 2022 and beyond.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$9.48 trillion.</p>
+          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>"}
+      
+      else if (input$option == "90% Tax Max") {"<p>Raises the cap on annual earnings subject to the Social Security payroll tax and that enter the benefits calculation to cover 90 percent of payroll. This increase is phased in over 10 years, beginning in 2016.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$6.97 trillion.</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to 2042.</p>"}
+      
+      else if (input$option == "90% Tax Max and 13.4% Payroll Tax") {"<p>Raises the cap on annual earnings subject to the Social Security payroll tax and that enter the benefits calculation to cover 90 percent of payroll. This increase is phased in over 10 years, beginning in 2016. Also, increase the payroll tax to 13.4% over t10 years beginning in 2016.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$3.09 trillion.</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to 2059.</p>"}
+      
+      else if (input$option == "Full Chained-CPI COLA") {"<p>Ties beneficiaries' annual cost-of-living-adjustment (COLA) to the change in the chained consumer price index (C-CPI-U), which grows more slowly than the standard CPI-U now used to compute COLAs. (Only those NRA or older)</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.41 trillion.</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to 2035.</p>"}
+      
+      else if (input$option == "Partial Chained-CPI COLA") {"<p>Ties beneficiaries' annual cost-of-living-adjustment (COLA) to the change in the chained consumer price index (C-CPI-U), which grows more slowly than the standard CPI-U now used to compute COLAs. (All beneficiaries including those under the NRA)</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.72 trillion.</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to 2035.</p>"}
+      
+      else if (input$option == "Increase FRA") {"<p>Indefinitely raises Social Security's FRA (now set at 67 beginning in 2022) and the age for receiving delayed retirement credits by one month every two years, beginning in 2024.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.69 trillion.</p>
+          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>"}
+      
+      else if (input$option == "Increase FRA and EEA") {"<p>Raises Social Security's early eligibility age (EEA), which is now set at 62, and indefinitely raises Social Security's FRA (now set at 67 beginning in 2022) and the age for receiving delayed retirement credits by one month every two years, beginning in 2024.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.62 trillion.</p>
+          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>"}
+      
+      else if (input$option == "$150,000 Tax Max") {"<p>Increase the tax cap to $150,000 between 2016 and 2018 and then increase the tax cap by wage growth plus 0.5 percentage points thereafter.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$9.32 trillion.</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to 2035.</p>"}
+      
+      else if (input$option == "$180,000 Tax Max") {"<p>Increase the tax cap to $180,000 between 2016 and 2018 and then increase the tax cap by wage growth plus 0.5 percentage points thereafter.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.76 trillion.</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to 2036.</p>"}
+      
+      else if (input$option == "Eliminate the Tax Max") {"<p>Eliminates the cap on annual earnings subject to the Social Security payroll tax and that enter the benefits calculation.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$4.63 trillion.<br/> <br/>
+          <p><strong>Insolvency Year</strong> increases from 2034 to 2055.</p>"}
+      
+      else if (input$option == "13.4% Payroll Tax") {"<p>Increase the payroll tax rate to 13.4% over 10 years beginning in 2016.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$7.05 trillion.</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to 2039.</p>"}
+      
+      else if (input$option == "14.4% Payroll Tax") {"<p>Increase the payroll tax rate to 14.4% over 10 years beginning in 2016.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$3.53 trillion.</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to 2052.</p>"}
+      
+      else if (input$option == "15.4% Payroll Tax") {"<p>Increase the payroll tax rate to 15.4% over 10 years beginning in 2016.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$0.046 trillion.</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to 2087.</p>"}
+      
+      else {"<p><strong>Current Law Scheduled</strong> assumes that current public policies, business practices, and individual behaviors continue, and that Social Security benefits are paid as promised, even after the trust fund runs out.</p>
+          <p><strong>Current Law Payable</strong> assumes that current public policies, business practices, and individual behaviors continue, but reduces Social Security benefits by a uniform amount after the trust fund runs out so that all benefits in each year can be paid out of revenues from that year.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> is -$10.59 trillion.</p>
+          <p><strong>Insolvency Year</strong> is 2034.</p>"}
       })
   
   # Chart 1
