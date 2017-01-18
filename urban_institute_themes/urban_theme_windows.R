@@ -45,7 +45,7 @@ library('RColorBrewer')
 #quartz.options(width = 8.33333333333333, height = 5.55555555555556, dpi = 72)
 
 # For windows, uncomment below line (and comment out above line)
-windows.options(width = 8.33333333333333, height = 5.55555555555556)
+#windows.options(width = 8.33333333333333, height = 5.55555555555556)
 
 #################### redefine default ggplot theme ###################
 theme_new <- theme_set(theme_bw())
