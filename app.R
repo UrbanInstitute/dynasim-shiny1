@@ -9,11 +9,11 @@ library(scales)
 # Source file for Windows
 Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
 #source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R")
-source("urban_institute_themes/urban_theme_windows.R")
+#source("urban_institute_themes/urban_theme_windows.R")
 
 # Source file for Mac
-#source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R")
-#source("urban_institute_themes/urban_theme_mac.R")
+source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R")
+source("urban_institute_themes/urban_theme_mac.R")
 
 # Load data and gather data into long form for ggplot2
 solvency <- read_csv("data/solvency.csv") %>%
@@ -36,7 +36,7 @@ ui <- fluidPage(
            
            p("The Social Security trustees project that, by the mid-2030s, the system will no longer be able to pay all scheduled benefits. Which reform option should policymakers pursue to help balance the system?
              Use our interactive tool to compare how different groups would fare, over time, under the following policy options."),
-           HTML("<p>Explore <b>the trust fund</b>, by income, by demographics, and <a href='http://www.urban.org/policy-centers/cross-center-initiatives/program-retirement-policy/projects/dynasim-projecting-older-americans-future-well-being/detailed-projections-older-population-through-2065'>the data</a></p>"),
+           HTML("<p>Explore <b>the trust fund</b>, by income, by demographics, and <a href='http://www.urban.org/policy-centers/cross-center-initiatives/program-retirement-policy/projects/dynasim-projecting-older-americans-future-well-being/detailed-projections-older-population-through-2065'>the data</a>.</p>"),
            
            br()
            )
