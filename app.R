@@ -7,13 +7,15 @@ library(RColorBrewer)
 library(scales)
 
 # Source file for Windows
-Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
+# Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
 #source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R")
 #source("urban_institute_themes/urban_theme_windows.R")
 
 # Source file for Mac
 source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R")
 source("urban_institute_themes/urban_theme_mac.R")
+
+latoCSS <- "http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic"
 
 # Load data and gather data into long form for ggplot2
 solvency <- read_csv("data/solvency.csv") %>%
@@ -25,6 +27,7 @@ trust.fund.ratio <- read_csv("data/trust_fund_ratio.csv") %>%
     mutate(value = value / 100)
 
 ui <- fluidPage(
+  tags$head(tags$link(rel = "stylesheet", type = "text/css", href = latoCSS)),
   
   theme = "shiny.css",
   
