@@ -7,13 +7,13 @@ library(RColorBrewer)
 library(scales)
 
 # Source file for Windows
-# Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
+Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64.exe")
 #source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R")
-#source("urban_institute_themes/urban_theme_windows.R")
+source("urban_institute_themes/urban_theme_windows.R")
 
 # Source file for Mac
-source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R")
-source("urban_institute_themes/urban_theme_mac.R")
+#source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R")
+#source("urban_institute_themes/urban_theme_mac.R")
 
 latoCSS <- "http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic"
 
@@ -113,13 +113,13 @@ server <- function(input, output) {
     solvency %>%
       filter(variable == "Scheduled Law" | variable == "Payable Law" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
+      geom_hline(yintercept = 0) +
       geom_line(size = 1) +
       scale_y_continuous(limits = c(-0.5, 1.5)) +
       labs(title = "Income to Benefits Ratio") + 
       xlab("Calendar Year") +
       ylab(NULL) +
-      theme(axis.ticks.length = unit(0, "points"),
-      axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
+      theme(axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
                                                      unit = "pt",
                                                      valid.unit = 8L,
                                                      class = c("margin", "unit"))),
@@ -127,7 +127,10 @@ server <- function(input, output) {
                                                      unit = "pt",
                                                      valid.unit = 8L,
                                                      class = c("margin", "unit"))),
-      legend.box.margin = margin(6, 0, 0, 0, "points"))
+      legend.box.margin = margin(6, 0, 0, 0, "points"),
+      plot.title = element_text(size = 18, hjust = -0.15),
+      axis.line = element_line(colour = "white"),
+      axis.ticks.length = unit(0, "points"))
     
     })
   
@@ -142,8 +145,7 @@ server <- function(input, output) {
            caption = " ") + 
       xlab("Calendar Year") +
       ylab(NULL) +
-      theme(axis.ticks.length = unit(0, "points"),
-            axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
+      theme(axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
                                                           unit = "pt",
                                                           valid.unit = 8L,
                                                           class = c("margin", "unit"))),
@@ -151,7 +153,8 @@ server <- function(input, output) {
                                                           unit = "pt",
                                                           valid.unit = 8L,
                                                           class = c("margin", "unit"))),
-            legend.box.margin = margin(6, 0, 0, 0, "points"))
+            legend.box.margin = margin(6, 0, 0, 0, "points"),
+            plot.title = element_text(size = 18, hjust = -0.2))
     
   })
   
@@ -160,14 +163,14 @@ server <- function(input, output) {
     trust.fund.ratio %>%
       filter(variable == "Scheduled Law" | variable == "Payable Law" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
+      geom_hline(yintercept = 0) +
       geom_line(size = 1) +
       labs(title = "Trust Fund Ratio",
            caption = "DYNASIM4") +
       xlab("Calendar Year") +
       ylab(NULL) +
       scale_y_continuous(limits = c(-20, 5), labels = scales::percent) +
-      theme(axis.ticks.length = unit(0, "points"),
-      axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
+      theme(axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
                                                       unit = "pt",
                                                       valid.unit = 8L,
                                                       class = c("margin", "unit"))),
@@ -175,7 +178,10 @@ server <- function(input, output) {
                                                     unit = "pt",
                                                     valid.unit = 8L,
                                                     class = c("margin", "unit"))),
-      legend.box.margin = margin(6, 0, 0, 0, "points"))
+      legend.box.margin = margin(6, 0, 0, 0, "points"),
+      plot.title = element_text(size = 18, hjust = -0.26),
+      axis.line = element_line(colour = "white"),
+      axis.ticks.length = unit(0, "points"))
     
   })
   
