@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+* {
+    font-family: Lato;
+}
+
+.selectize-input.focus{
+    border-color: #cccccc;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
