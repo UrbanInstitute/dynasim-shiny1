@@ -13,7 +13,7 @@ source("urban_institute_themes/urban_theme_windows.R")
 
 # Source file for Mac
 #source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R")
-#source("urban_institute_themes/urban_theme_mac.R")
+#source("urban_institute_themes/urban_theme.R")
 
 latoCSS <- "http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic"
 
@@ -121,18 +121,9 @@ server <- function(input, output) {
       labs(title = "Income to Benefits Ratio") + 
       xlab("Calendar Year") +
       ylab(NULL) +
-      theme(text = element_text(family = "Lato"),
-            axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
-                                                     unit = "pt",
-                                                     valid.unit = 8L,
-                                                     class = c("margin", "unit"))),
-            axis.text.y = element_text(margin = structure(c(0, 2, 0, 0),
-                                                     unit = "pt",
-                                                     valid.unit = 8L,
-                                                     class = c("margin", "unit"))),
-      legend.box.margin = margin(6, 0, 0, 0, "points"),
-      plot.title = element_text(size = 18, hjust = -0.15),
-      axis.line = element_line(colour = "white"))
+      theme(
+      plot.title = element_text(hjust = -0.15),
+      axis.line = element_blank())
     
     })
   
@@ -147,16 +138,7 @@ server <- function(input, output) {
            caption = " ") + 
       xlab("Calendar Year") +
       ylab(NULL) +
-      theme(axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
-                                                          unit = "pt",
-                                                          valid.unit = 8L,
-                                                          class = c("margin", "unit"))),
-            axis.text.y = element_text(margin = structure(c(0, 2, 0, 0),
-                                                          unit = "pt",
-                                                          valid.unit = 8L,
-                                                          class = c("margin", "unit"))),
-            legend.box.margin = margin(6, 0, 0, 0, "points"),
-            plot.title = element_text(size = 18, hjust = -0.2))
+      theme(plot.title = element_text(hjust = -0.2))
     
   })
   
@@ -168,21 +150,12 @@ server <- function(input, output) {
       geom_hline(yintercept = 0) +
       geom_line(size = 1) +
       labs(title = "Trust Fund Ratio",
-           caption = "DYNASIM4") +
+           caption = "DYNASIM3") +
       xlab("Calendar Year") +
       ylab(NULL) +
       scale_y_continuous(limits = c(-20, 5), labels = scales::percent) +
-      theme(axis.text.x = element_text(margin = structure(c(4, 0, 0, 0),
-                                                      unit = "pt",
-                                                      valid.unit = 8L,
-                                                      class = c("margin", "unit"))),
-      axis.text.y = element_text(margin = structure(c(0, 2, 0, 0),
-                                                    unit = "pt",
-                                                    valid.unit = 8L,
-                                                    class = c("margin", "unit"))),
-      legend.box.margin = margin(6, 0, 0, 0, "points"),
-      plot.title = element_text(size = 18, hjust = -0.26),
-      axis.line = element_line(colour = "white"))
+      theme(plot.title = element_text(hjust = -0.26),
+      axis.line = element_blank())
     
   })
   
