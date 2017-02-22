@@ -3,6 +3,7 @@ library(shiny)
 library(tidyverse)
 library(extrafont)
 library(grid)
+library(gridExtra)
 library(RColorBrewer)
 library(scales)
 
@@ -112,18 +113,29 @@ server <- function(input, output) {
 
   output$hist1 <- renderPlot({ 
    
-    solvency %>%
+    boom <- solvency %>%
       filter(variable == "Scheduled Law" | variable == "Payable Law" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_hline(yintercept = 0) +
       geom_line(size = 1) +
       scale_y_continuous(limits = c(-0.5, 1.5)) +
-      labs(title = "Income to Benefits Ratio") + 
+    #  labs(title = "Income to Benefits Ratio") + 
       xlab("Calendar Year") +
       ylab(NULL) +
-      theme(
-      plot.title = element_text(hjust = -0.15),
-      axis.line = element_blank())
+      theme(axis.line = element_blank())
+  
+    title.grob <- textGrob(
+      label = "Income to Benefits Ratio",
+      x = unit(0.2, "lines"), 
+      y = unit(0, "lines"),
+      hjust = 0, vjust = 0,
+      gp = gpar(fontsize = 18, fontfamily = "Lato"))
+    
+    margin <- unit(0.5, "line")
+    grid.newpage()
+    grid.arrange(title.grob, boom,
+                 heights = unit.c(grobHeight(title.grob) + margin, # Margin above the title
+                                  unit(2, "null")))
     
     })
   
