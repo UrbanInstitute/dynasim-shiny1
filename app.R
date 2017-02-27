@@ -32,7 +32,7 @@ ui <- fluidPage(
   
   tags$head(tags$link(rel = "stylesheet", type = "text/css", href = latoCSS)),
   
-  theme = "styles.css",
+  theme = "shiny.css",
   
   fluidRow(
   
@@ -42,7 +42,7 @@ ui <- fluidPage(
            
            p("The Social Security trustees project that, by the mid-2030s, the system will no longer be able to pay all scheduled benefits. Which reform option should policymakers pursue to help balance the system?
              Use our interactive tool to compare how different groups would fare, over time, under the following policy options."),
-           HTML("<p>Explore <b>the trust fund</b>, by income, by demographics, and <a href='http://www.urban.org/policy-centers/cross-center-initiatives/program-retirement-policy/projects/dynasim-projecting-older-americans-future-well-being/detailed-projections-older-population-through-2065'>the data</a>.</p>"),
+           HTML("<p>Explore <b>the trust fund</b>, by income, by demographics, and <a href='http://www.urban.org/policy-centers/cross-center-initiatives/program-retirement-policy/projects/dynasim-projecting-older-americans-future-well-being/detailed-projections-older-population-through-2065' target='_blank'>the data</a>.</p>"),
            
            br()
            )
@@ -162,7 +162,8 @@ server <- function(input, output) {
       geom_hline(yintercept = 0) +
       geom_line(size = 1) +
       labs(title = "Trust Fund Ratio",
-           caption = "DYNASIM3") +
+           caption = "DYNASIM3
+                      Urban Institute") +
       xlab("Calendar Year") +
       ylab(NULL) +
       scale_y_continuous(limits = c(-20, 5), labels = scales::percent) +
