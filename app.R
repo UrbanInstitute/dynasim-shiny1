@@ -18,7 +18,6 @@ source("urban_institute_themes/urban_theme_windows.R")
 
 latoCSS <- "http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic"
 
-
 # Load data and gather data into long form for ggplot2
 solvency <- read_csv("data/solvency.csv") %>%
     mutate(variable = factor(variable, unique(variable)))
@@ -27,6 +26,7 @@ cost.payroll <- read_csv("data/cost_payroll.csv") %>%
 trust.fund.ratio <- read_csv("data/trust_fund_ratio.csv") %>%
     mutate(variable = factor(variable, unique(variable))) %>%
     mutate(value = value / 100)
+summary <- read_csv("data/summary.csv")
 
 ui <- fluidPage(
   
@@ -175,79 +175,112 @@ server <- function(input, output) {
   # Explanation of Social Security Reform
   output$text1 <- renderText({
       
-      if (input$option == "BPC Package") {"<p>Annual PIA, limit spousal benefits, replace the WEP and GPO with a proportional reduction in OASI benefits based on covered earnings, enhance survivor benefits, increase the progressivity of the benefit formula, increase Social Security tax max to $195,000, payroll tax to 13.4% and FRA to 69, switch to C-CPI-U for COLAs, end 'claim-and-suspend' games, create a basic minimum benefit for all individuals above the FRA eligible for Social Security, and tax 100 percent of Social Security benefits for beneficiaries with annual incomes above $250,000.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to $0.03 trillion.</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to beyond 2087.</p>"}
+    insolvency.year <- summary %>%
+      mutate(Option = ifelse(Option == "Current Law Scheduled", "NULL", Option)) %>%
+      filter(Option == input$option) %>%
+      select(`Insolvency Year`)
+    
+    open.group.unfunded.liability <- summary %>%
+      mutate(Option = ifelse(Option == "Current Law Scheduled", "NULL", Option)) %>%
+      filter(Option == input$option) %>%
+      select(`Open Group Unfunded Obligation`)
+  
+    actuarial.balance <- summary %>%
+      mutate(Option = ifelse(Option == "Current Law Scheduled", "NULL", Option)) %>%
+      filter(Option == input$option) %>%
+      select(`75-Year Actuarial Balance`)
+
+      if (input$option == "BPC Package") {paste("<p>Annual PIA, limit spousal benefits, replace the WEP and GPO with a proportional reduction in OASI benefits based on covered earnings, enhance survivor benefits, increase the progressivity of the benefit formula, increase Social Security tax max to $195,000, payroll tax to 13.4% and FRA to 69, switch to C-CPI-U for COLAs, end 'claim-and-suspend' games, create a basic minimum benefit for all individuals above the FRA eligible for Social Security, and tax 100 percent of Social Security benefits for beneficiaries with annual incomes above $250,000.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "Annual PIA") {"<p>Eliminates the preferential treatment of workers with short careers by applying Social Security’s progressive benefit formula to the 40 highest years of wage-indexed earnings divided by 37 rather than applying the formula to total wage-indexed earnings received in the top 35 years. It also makes the benefit formula more progressive. This begins with OASI claimants who attain age 62 in 2022.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> increases from -$10.59 trillion to -$14.19 trillion.</p>
-          <p><strong>Insolvency Year</strong> decreases from 2034 to 2033.</p>"}
+      else if (input$option == "Annual PIA") {paste("<p>Eliminates the preferential treatment of workers with short careers by applying Social Security’s progressive benefit formula to the 40 highest years of wage-indexed earnings divided by 37 rather than applying the formula to total wage-indexed earnings received in the top 35 years. It also makes the benefit formula more progressive. This begins with OASI claimants who attain age 62 in 2022.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> increases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> decreases from 2034 to", as.character(insolvency.year), ".</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "Increase Benefits Taxation") {"<p>Increases the taxation of 
+      else if (input$option == "Increase Benefits Taxation") {paste("<p>Increases the taxation of 
           Social Security benefits </p>
-          <p><strong>Open Group Unfunded Obligation</strong> increases from -$10.59 trillion to -$10.93 trillion.</p>
-          <p><strong>Insolvency Year</strong> remains unchaged at 2034.</p>"}
+          <p><strong>Open Group Unfunded Obligation</strong> increases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> remains unchaged at 2034.</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "Cap Spouse Benefits") {"<p>Caps the spouse benefit at $1,121.68 in 2016 beginning for claimants who turn 60 in 2020 and beyond. Indexes the cap annually by chained CPI-U.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$9.94 trillion.</p>
-          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>"}
+      else if (input$option == "Cap Spouse Benefits") {paste("<p>Caps the spouse benefit at $1,121.68 in 2016 beginning for claimants who turn 60 in 2020 and beyond. Indexes the cap annually by chained CPI-U.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "75% Survivor Benefit") {"<p>Increases joint-and-survivors benefits to 75 percent of combined benefits for the couple, from 50 percent of combined benefits, for claimants who turn 62 in 2022 and beyond.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$9.48 trillion.</p>
-          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>"}
+      else if (input$option == "75% Survivor Benefit") {paste("<p>Increases joint-and-survivors benefits to 75 percent of combined benefits for the couple, from 50 percent of combined benefits, for claimants who turn 62 in 2022 and beyond.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "90% Tax Max") {"<p>Raises the cap on annual earnings subject to the Social Security payroll tax and that enter the benefits calculation to cover 90 percent of payroll. This increase is phased in over 10 years, beginning in 2016.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$6.97 trillion.</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to 2042.</p>"}
+      else if (input$option == "90% Tax Max") {paste("<p>Raises the cap on annual earnings subject to the Social Security payroll tax and that enter the benefits calculation to cover 90 percent of payroll. This increase is phased in over 10 years, beginning in 2016.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "90% Tax Max and 13.4% Payroll Tax") {"<p>Raises the cap on annual earnings subject to the Social Security payroll tax and that enter the benefits calculation to cover 90 percent of payroll. This increase is phased in over 10 years, beginning in 2016. Also, increase the payroll tax to 13.4% over t10 years beginning in 2016.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$3.09 trillion.</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to 2059.</p>"}
+      else if (input$option == "90% Tax Max and 13.4% Payroll Tax") {paste("<p>Raises the cap on annual earnings subject to the Social Security payroll tax and that enter the benefits calculation to cover 90 percent of payroll. This increase is phased in over 10 years, beginning in 2016. Also, increase the payroll tax to 13.4% over t10 years beginning in 2016.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "Full Chained-CPI COLA") {"<p>Ties beneficiaries' annual cost-of-living-adjustment (COLA) to the change in the chained consumer price index (C-CPI-U), which grows more slowly than the standard CPI-U now used to compute COLAs. (Only those NRA or older)</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.41 trillion.</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to 2035.</p>"}
+      else if (input$option == "Full Chained-CPI COLA") {paste("<p>Ties beneficiaries' annual cost-of-living-adjustment (COLA) to the change in the chained consumer price index (C-CPI-U), which grows more slowly than the standard CPI-U now used to compute COLAs. (Only those NRA or older)</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "Partial Chained-CPI COLA") {"<p>Ties beneficiaries' annual cost-of-living-adjustment (COLA) to the change in the chained consumer price index (C-CPI-U), which grows more slowly than the standard CPI-U now used to compute COLAs. (All beneficiaries including those under the NRA)</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.72 trillion.</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to 2035.</p>"}
+      else if (input$option == "Partial Chained-CPI COLA") {paste("<p>Ties beneficiaries' annual cost-of-living-adjustment (COLA) to the change in the chained consumer price index (C-CPI-U), which grows more slowly than the standard CPI-U now used to compute COLAs. (All beneficiaries including those under the NRA)</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "Increase FRA") {"<p>Indefinitely raises Social Security's FRA (now set at 67 beginning in 2022) and the age for receiving delayed retirement credits by one month every two years, beginning in 2024.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.69 trillion.</p>
-          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>"}
+      else if (input$option == "Increase FRA") {paste("<p>Indefinitely raises Social Security's FRA (now set at 67 beginning in 2022) and the age for receiving delayed retirement credits by one month every two years, beginning in 2024.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "Increase FRA and EEA") {"<p>Raises Social Security's early eligibility age (EEA), which is now set at 62, and indefinitely raises Social Security's FRA (now set at 67 beginning in 2022) and the age for receiving delayed retirement credits by one month every two years, beginning in 2024.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.62 trillion.</p>
-          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>"}
+      else if (input$option == "Increase FRA and EEA") {paste("<p>Raises Social Security's early eligibility age (EEA), which is now set at 62, and indefinitely raises Social Security's FRA (now set at 67 beginning in 2022) and the age for receiving delayed retirement credits by one month every two years, beginning in 2024.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "$150,000 Tax Max") {"<p>Increase the tax cap to $150,000 between 2016 and 2018 and then increase the tax cap by wage growth plus 0.5 percentage points thereafter.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$9.32 trillion.</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to 2035.</p>"}
+      else if (input$option == "$150,000 Tax Max") {paste("<p>Increase the tax cap to $150,000 between 2016 and 2018 and then increase the tax cap by wage growth plus 0.5 percentage points thereafter.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "$180,000 Tax Max") {"<p>Increase the tax cap to $180,000 between 2016 and 2018 and then increase the tax cap by wage growth plus 0.5 percentage points thereafter.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$8.76 trillion.</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to 2036.</p>"}
+      else if (input$option == "$180,000 Tax Max") {paste("<p>Increase the tax cap to $180,000 between 2016 and 2018 and then increase the tax cap by wage growth plus 0.5 percentage points thereafter.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "Eliminate the Tax Max") {"<p>Eliminates the cap on annual earnings subject to the Social Security payroll tax and that enter the benefits calculation.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$4.63 trillion.<br/> <br/>
-          <p><strong>Insolvency Year</strong> increases from 2034 to 2055.</p>"}
+      else if (input$option == "Eliminate the Tax Max") {paste("<p>Eliminates the cap on annual earnings subject to the Social Security payroll tax and that enter the benefits calculation.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".<br/> <br/>
+          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "13.4% Payroll Tax") {"<p>Increase the payroll tax rate to 13.4% over 10 years beginning in 2016.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$7.05 trillion.</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to 2039.</p>"}
+      else if (input$option == "13.4% Payroll Tax") {paste("<p>Increase the payroll tax rate to 13.4% over 10 years beginning in 2016.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "14.4% Payroll Tax") {"<p>Increase the payroll tax rate to 14.4% over 10 years beginning in 2016.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$3.53 trillion.</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to 2052.</p>"}
+      else if (input$option == "14.4% Payroll Tax") {paste("<p>Increase the payroll tax rate to 14.4% over 10 years beginning in 2016.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else if (input$option == "15.4% Payroll Tax") {"<p>Increase the payroll tax rate to 15.4% over 10 years beginning in 2016.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to -$0.046 trillion.</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to 2087.</p>"}
+      else if (input$option == "15.4% Payroll Tax") {paste("<p>Increase the payroll tax rate to 15.4% over 10 years beginning in 2016.</p>
+          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
+          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
       
-      else {"<p><strong>Current Law Scheduled</strong> assumes that current public policies, business practices, and individual behaviors continue, and that Social Security benefits are paid as promised, even after the trust fund runs out.</p>
+      else if (input$option == "NULL") {paste("<p><strong>Current Law Scheduled</strong> assumes that current public policies, business practices, and individual behaviors continue, and that Social Security benefits are paid as promised, even after the trust fund runs out.</p>
           <p><strong>Current Law Payable</strong> assumes that current public policies, business practices, and individual behaviors continue, but reduces Social Security benefits by a uniform amount after the trust fund runs out so that all benefits in each year can be paid out of revenues from that year.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> is -$10.59 trillion.</p>
-          <p><strong>Insolvency Year</strong> is 2034.</p>"}
+          <p><strong>Open Group Unfunded Obligation</strong> is", as.character(open.group.unfunded.liability), ".</p>
+          <p><strong>Insolvency Year</strong> is 2034.</p>
+          <p><strong>75-Year Actuarial Balance</strong> is", as.character(actuarial.balance), ".")}
       })
   
   # Chart 1
