@@ -78,19 +78,25 @@ ui <- fluidPage(
 
     column(4,
            style = "position:relative",
+           
+           h4("Income to Benefits Ratio"),
            plotOutput("hist1",
-                      hover = hoverOpts("plot_hover1", delay = 100, delayType = "debounce")),
+                      hover = hoverOpts("plot_hover1", delay = 100, delayType = "throttle")),
            uiOutput("hover_info1"))),
   
   fluidRow(
     column(4, 
            style = "position:relative",
+           
+           h4("Cost to Taxable Payroll Ratio"), 
            plotOutput("hist2",
                       hover = hoverOpts("plot_hover2", delay = 100, delayType = "debounce")),
            uiOutput("hover_info2")),
            
     column(4,
            style = "position:relative",
+           
+           h4("Trust Fund Ratio"),
            plotOutput("hist3",
                       hover = hoverOpts("plot_hover3", delay = 100, delayType = "debounce")),
            uiOutput("hover_info3"))),
@@ -113,29 +119,17 @@ server <- function(input, output) {
 
   output$hist1 <- renderPlot({ 
    
-    boom <- solvency %>%
+    solvency %>%
       filter(variable == "Scheduled Law" | variable == "Payable Law" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_hline(yintercept = 0) +
       geom_line(size = 1) +
       scale_y_continuous(limits = c(-0.5, 1.5)) +
-    #  labs(title = "Income to Benefits Ratio") + 
-      xlab("Calendar Year") +
-      ylab(NULL) +
-      theme(axis.line = element_blank())
-  
-    title.grob <- textGrob(
-      label = "Income to Benefits Ratio",
-      x = unit(0.2, "lines"), 
-      y = unit(0, "lines"),
-      hjust = 0, vjust = 0,
-      gp = gpar(fontsize = 18, fontfamily = "Lato"))
-    
-    margin <- unit(0.5, "line")
-    grid.newpage()
-    grid.arrange(title.grob, boom,
-                 heights = unit.c(grobHeight(title.grob) + margin, # Margin above the title
-                                  unit(2, "null")))
+      labs(title = NULL,
+           x = "Calendar Year",
+           y = NULL) + 
+      theme(plot.margin = margin(t = -5),
+            axis.line = element_blank())
     
     })
   
@@ -146,11 +140,11 @@ server <- function(input, output) {
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_line(size = 1) +
       scale_y_continuous(limits = c(0, 0.31), expand = c(0, 0)) +
-      labs(title = "Cost to Taxable Payroll Ratio",
-           caption = " ") + 
+      labs(caption = "DYNASIM3
+                      Urban Institute") + 
       xlab("Calendar Year") +
       ylab(NULL) +
-      theme(plot.title = element_text(hjust = -0.2))
+      theme(plot.margin = margin(t = -5))
     
   })
   
@@ -161,14 +155,13 @@ server <- function(input, output) {
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
       geom_hline(yintercept = 0) +
       geom_line(size = 1) +
-      labs(title = "Trust Fund Ratio",
-           caption = "DYNASIM3
+      labs(caption = "DYNASIM3
                       Urban Institute") +
       xlab("Calendar Year") +
       ylab(NULL) +
       scale_y_continuous(limits = c(-20, 5), labels = scales::percent) +
-      theme(plot.title = element_text(hjust = -0.26),
-      axis.line = element_blank())
+      theme(plot.margin = margin(t = -5),
+            axis.line = element_blank())
     
   })
   

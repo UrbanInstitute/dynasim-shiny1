@@ -1,16 +1,23 @@
-@import url('https://fonts.googleapis.com/css?family=Lato');
-
 * {
   font-family: Lato;
+}
+
+h4 {
+  color: #000000;
+}
+
+.item {
+  margin-top: 3.5px;
 }
 
 .selectize-control {
   border: black;
 	text-align: left;
 	white-space: nowrap;
-	background: url(../urban-select-2x.png) no-repeat right #efefef;
+	background: url(urban-select-2x.png) no-repeat right #efefef;
 	background-size: 45px 45px;
   margin: 0px;
+  height: 39px;
 }
 
 .selectize-input {
@@ -21,19 +28,32 @@
   background-color: rgba(0, 0, 0, 0.0);
 }
 
+.selectize-control.single .selectize-input.input-active input {
+  cursor: pointer;
+}
 
-.selectize-input.focus{
+.selectize-input.focus {
     border-color: #cccccc;
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
     box-shadow: none;
 }
 
+.selectize-input .item {
+	width: 299px;
+	overflow: hidden;
+	position: absolute;
+}
+
+.selectize-input.items.full.has-options.has-items {
+  height: 39px;
+}
+
 .selectize-input.items.full.has-options.has-items.focus.input-active.dropdown-active {
   border: black;
 	text-align: left;
 	white-space: nowrap;
-	background: url(../urban-select-2x.png) no-repeat right #efefef;
+	background: url(urban-select-2x.png) no-repeat right #efefef;
 	background-size: 45px 45px;
 	margin: 0px;
 	cursor: pointer;
@@ -48,7 +68,8 @@
 
 .selectize-control.single
 .selectize-input:after {
-    border-width: 0px 0px 0px 0px;
+  border-width: 0px 0px 0px 0px;
+  height: 39px;
 }
 
 .selectize-dropdown.single {
@@ -69,6 +90,23 @@
   border-width: 0px 0px 0px 0px;
   border-color: transparent transparent rgba(0, 0, 0, 0.0) transparent;
 }
+
+.selectize-input,
+.selectize-control.single .selectize-input.input-active {
+  cursor: pointer;
+}
+
+.selectize-control.single .selectize-input.input-active,
+.selectize-control.single .selectize-input.input-active input {
+  cursor: pointer;
+}
+
+.selectize-control.single .selectize-input, .selectize-control.single .selectize-input input {
+    border: none !important;
+    color: transparent;
+    text-shadow: 0 0 0 grey;
+}
+
 
 .control-label {
   color:#1696d2;
