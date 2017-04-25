@@ -28,6 +28,8 @@ trust.fund.ratio <- read_csv("data/trust_fund_ratio.csv") %>%
     mutate(value = value / 100)
 summary <- read_csv("data/summary.csv")
 
+option_text <- read_csv("text/option.csv")
+
 ui <- fluidPage(
   
   tags$head(tags$link(rel = "stylesheet", type = "text/css", href = latoCSS)),
@@ -72,7 +74,10 @@ ui <- fluidPage(
                     "15.4% Payroll Tax" = "15.4% Payroll Tax")),
       
       # Explanation of Social Security Reform
-      htmlOutput("text1")),
+      htmlOutput("text1"),
+      htmlOutput("text2"),
+      htmlOutput("text3"),
+      htmlOutput("text4")),
       
       br(),
 
@@ -80,7 +85,7 @@ ui <- fluidPage(
            style = "position:relative",
            
            h4("Income to Benefits Ratio"),
-           plotOutput("hist1",
+           plotOutput("plot1",
                       hover = hoverOpts("plot_hover1", delay = 100, delayType = "throttle")),
            uiOutput("hover_info1"))),
   
@@ -89,7 +94,7 @@ ui <- fluidPage(
            style = "position:relative",
            
            h4("Cost to Taxable Payroll Ratio"), 
-           plotOutput("hist2",
+           plotOutput("plot2",
                       hover = hoverOpts("plot_hover2", delay = 100, delayType = "debounce")),
            uiOutput("hover_info2")),
            
@@ -97,7 +102,7 @@ ui <- fluidPage(
            style = "position:relative",
            
            h4("Trust Fund Ratio"),
-           plotOutput("hist3",
+           plotOutput("plot3",
                       hover = hoverOpts("plot_hover3", delay = 100, delayType = "debounce")),
            uiOutput("hover_info3"))),
   
@@ -117,165 +122,110 @@ ui <- fluidPage(
 
 server <- function(input, output) {
 
-  output$hist1 <- renderPlot({ 
+  output$plot1 <- renderPlot({ 
    
     solvency %>%
       filter(variable == "Scheduled Law" | variable == "Payable Law" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
-      geom_hline(yintercept = 0) +
-      geom_line(size = 1) +
-      scale_y_continuous(limits = c(-0.5, 1.5)) +
-      labs(title = NULL,
-           x = "Calendar Year",
-           y = NULL) + 
-      theme(plot.margin = margin(t = -5),
-            axis.line = element_blank())
+        geom_hline(yintercept = 0) +
+        geom_line(size = 1) +
+        scale_y_continuous(limits = c(-0.5, 1.5)) +
+        labs(title = NULL,
+             x = "Calendar Year",
+             y = NULL) + 
+        theme(plot.margin = margin(t = -5),
+              axis.line = element_blank())
     
     })
   
-  output$hist2 <- renderPlot({ 
+  output$plot2 <- renderPlot({ 
     
     cost.payroll %>%
       filter(variable == "Scheduled Law" | variable == "Payable Law" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
-      geom_line(size = 1) +
-      scale_y_continuous(limits = c(0, 0.31), expand = c(0, 0)) +
-      labs(caption = "DYNASIM3
-                      Urban Institute") + 
-      xlab("Calendar Year") +
-      ylab(NULL) +
-      theme(plot.margin = margin(t = -5))
+        geom_line(size = 1) +
+        scale_y_continuous(limits = c(0, 0.31), expand = c(0, 0)) +
+        labs(caption = "DYNASIM3
+                        Urban Institute") + 
+        xlab("Calendar Year") +
+        ylab(NULL) +
+        theme(plot.margin = margin(t = -5))
     
   })
   
-  output$hist3 <- renderPlot({ 
+  output$plot3 <- renderPlot({ 
 
     trust.fund.ratio %>%
       filter(variable == "Scheduled Law" | variable == "Payable Law" | variable == input$option) %>%
       ggplot(aes(x = calendar.year, y = value, colour = variable)) +
-      geom_hline(yintercept = 0) +
-      geom_line(size = 1) +
-      labs(caption = "DYNASIM3
-                      Urban Institute") +
-      xlab("Calendar Year") +
-      ylab(NULL) +
-      scale_y_continuous(limits = c(-20, 5), labels = scales::percent) +
-      theme(plot.margin = margin(t = -5),
-            axis.line = element_blank())
+        geom_hline(yintercept = 0) +
+        geom_line(size = 1) +
+        labs(caption = "DYNASIM3
+                        Urban Institute") +
+        xlab("Calendar Year") +
+        ylab(NULL) +
+        scale_y_continuous(limits = c(-20, 5), labels = scales::percent) +
+        theme(plot.margin = margin(t = -5),
+              axis.line = element_blank())
     
   })
   
   # Explanation of Social Security Reform
+  
   output$text1 <- renderText({
-      
-    insolvency.year <- summary %>%
-      mutate(Option = ifelse(Option == "Current Law Scheduled", "NULL", Option)) %>%
-      filter(Option == input$option) %>%
-      select(`Insolvency Year`)
+    
+    as.character(
+      option_text %>%
+        filter(option == input$option) %>%
+        select(text)
+    )
+  })
+  
+  output$text2 <- renderText({
     
     open.group.unfunded.liability <- summary %>%
       mutate(Option = ifelse(Option == "Current Law Scheduled", "NULL", Option)) %>%
       filter(Option == input$option) %>%
       select(`Open Group Unfunded Obligation`)
+    
+    as.character(
+      option_text %>%
+        filter(option == input$option) %>%
+        mutate(text2 = paste(oguo1, as.character(open.group.unfunded.liability), oguo3)) %>%
+        select(text2)
+    )
+  })
   
+  output$text3 <- renderText({
+    
+    insolvency.year <- summary %>%
+      mutate(Option = ifelse(Option == "Current Law Scheduled", "NULL", Option)) %>%
+      filter(Option == input$option) %>%
+      select(`Insolvency Year`)
+    
+    as.character(
+      option_text %>%
+        filter(option == input$option) %>%
+        mutate(text3 = paste(insolvency1, as.character(insolvency.year), insolvency3)) %>%
+        select(text3)
+    )
+  }) 
+  
+  output$text4 <- renderText({
+    
     actuarial.balance <- summary %>%
       mutate(Option = ifelse(Option == "Current Law Scheduled", "NULL", Option)) %>%
       filter(Option == input$option) %>%
       select(`75-Year Actuarial Balance`)
-
-      if (input$option == "BPC Package") {paste("<p>Annual PIA, limit spousal benefits, replace the WEP and GPO with a proportional reduction in OASI benefits based on covered earnings, enhance survivor benefits, increase the progressivity of the benefit formula, increase Social Security tax max to $195,000, payroll tax to 13.4% and FRA to 69, switch to C-CPI-U for COLAs, end 'claim-and-suspend' games, create a basic minimum benefit for all individuals above the FRA eligible for Social Security, and tax 100 percent of Social Security benefits for beneficiaries with annual incomes above $250,000.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "Annual PIA") {paste("<p>Eliminates the preferential treatment of workers with short careers by applying Social Security’s progressive benefit formula to the 40 highest years of wage-indexed earnings divided by 37 rather than applying the formula to total wage-indexed earnings received in the top 35 years. It also makes the benefit formula more progressive. This begins with OASI claimants who attain age 62 in 2022.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> increases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> decreases from 2034 to", as.character(insolvency.year), ".</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "Increase Benefits Taxation") {paste("<p>Increases the taxation of 
-          Social Security benefits </p>
-          <p><strong>Open Group Unfunded Obligation</strong> increases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> remains unchaged at 2034.</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "Cap Spouse Benefits") {paste("<p>Caps the spouse benefit at $1,121.68 in 2016 beginning for claimants who turn 60 in 2020 and beyond. Indexes the cap annually by chained CPI-U.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "75% Survivor Benefit") {paste("<p>Increases joint-and-survivors benefits to 75 percent of combined benefits for the couple, from 50 percent of combined benefits, for claimants who turn 62 in 2022 and beyond.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "90% Tax Max") {paste("<p>Raises the cap on annual earnings subject to the Social Security payroll tax and that enter the benefits calculation to cover 90 percent of payroll. This increase is phased in over 10 years, beginning in 2016.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "90% Tax Max and 13.4% Payroll Tax") {paste("<p>Raises the cap on annual earnings subject to the Social Security payroll tax and that enter the benefits calculation to cover 90 percent of payroll. This increase is phased in over 10 years, beginning in 2016. Also, increase the payroll tax to 13.4% over t10 years beginning in 2016.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "Full Chained-CPI COLA") {paste("<p>Ties beneficiaries' annual cost-of-living-adjustment (COLA) to the change in the chained consumer price index (C-CPI-U), which grows more slowly than the standard CPI-U now used to compute COLAs. (Only those NRA or older)</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "Partial Chained-CPI COLA") {paste("<p>Ties beneficiaries' annual cost-of-living-adjustment (COLA) to the change in the chained consumer price index (C-CPI-U), which grows more slowly than the standard CPI-U now used to compute COLAs. (All beneficiaries including those under the NRA)</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "Increase FRA") {paste("<p>Indefinitely raises Social Security's FRA (now set at 67 beginning in 2022) and the age for receiving delayed retirement credits by one month every two years, beginning in 2024.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "Increase FRA and EEA") {paste("<p>Raises Social Security's early eligibility age (EEA), which is now set at 62, and indefinitely raises Social Security's FRA (now set at 67 beginning in 2022) and the age for receiving delayed retirement credits by one month every two years, beginning in 2024.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> remains unchanged at 2034.</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "$150,000 Tax Max") {paste("<p>Increase the tax cap to $150,000 between 2016 and 2018 and then increase the tax cap by wage growth plus 0.5 percentage points thereafter.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "$180,000 Tax Max") {paste("<p>Increase the tax cap to $180,000 between 2016 and 2018 and then increase the tax cap by wage growth plus 0.5 percentage points thereafter.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "Eliminate the Tax Max") {paste("<p>Eliminates the cap on annual earnings subject to the Social Security payroll tax and that enter the benefits calculation.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".<br/> <br/>
-          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "13.4% Payroll Tax") {paste("<p>Increase the payroll tax rate to 13.4% over 10 years beginning in 2016.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "14.4% Payroll Tax") {paste("<p>Increase the payroll tax rate to 14.4% over 10 years beginning in 2016.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "15.4% Payroll Tax") {paste("<p>Increase the payroll tax rate to 15.4% over 10 years beginning in 2016.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> decreases from -$10.59 trillion to", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> increases from 2034 to", as.character(insolvency.year), ".</p>
-          <p><strong>75-Year Actuarial Balance</strong> increases from -2.81% to", as.character(actuarial.balance), ".")}
-      
-      else if (input$option == "NULL") {paste("<p><strong>Current Law Scheduled</strong> assumes that current public policies, business practices, and individual behaviors continue, and that Social Security benefits are paid as promised, even after the trust fund runs out.</p>
-          <p><strong>Current Law Payable</strong> assumes that current public policies, business practices, and individual behaviors continue, but reduces Social Security benefits by a uniform amount after the trust fund runs out so that all benefits in each year can be paid out of revenues from that year.</p>
-          <p><strong>Open Group Unfunded Obligation</strong> is", as.character(open.group.unfunded.liability), ".</p>
-          <p><strong>Insolvency Year</strong> is 2034.</p>
-          <p><strong>75-Year Actuarial Balance</strong> is", as.character(actuarial.balance), ".")}
-      })
   
+    as.character(
+      option_text %>%
+        filter(option == input$option) %>%
+        mutate(text4 = paste(actuarial.balance1, as.character(actuarial.balance), actuarial.balance3)) %>%
+        select(text4)
+    )
+  })   
+ 
   # Chart 1
   output$hover_info1 <- renderUI({
     hover <- input$plot_hover1
