@@ -14,7 +14,7 @@ source("urban_institute_themes/urban_theme_windows.R")
 
 # Source file for Mac
 #source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R")
-#source("urban_institute_themes/urban_theme.R")
+#source("urban_institute_themes/urban_theme_mac.R")
 
 latoCSS <- "http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic"
 
@@ -62,8 +62,8 @@ ui <- fluidPage(
                     "75% Survivor Benefit" = "75% Survivor Benefit",
                     "90% Tax Max" = "90% Tax Max",
                     "90% Tax Max and 13.4% Payroll Tax" = "90% Tax Max and 13.4% Payroll Tax",
-                    "Full Chained-CPI COLA" = "Full Chained-CPI COLA",
-                    "Partial Chained-CPI COLA" = "Partial Chained-CPI COLA",
+                    "Chained-CPI COLA" = "Chained-CPI COLA",
+                    "Reduce COLA" = "Reduce COLA",
                     "Increase FRA" = "Increase FRA",
                     "Increase EEA & FRA" = "Increase FRA and EEA",
                     "$150,000 Tax Max" = "$150,000 Tax Max",
