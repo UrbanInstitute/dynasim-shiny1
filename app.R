@@ -19,16 +19,54 @@ source("urban_institute_themes/urban_theme_windows.R")
 latoCSS <- "http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic"
 
 # Load data and gather data into long form for ggplot2
-solvency <- read_csv("data/solvency.csv") %>%
+solvency <- read_csv("data/solvency.csv",
+                     col_types = cols(
+                       calendar.year = col_integer(),
+                       variable = col_character(),
+                       value = col_double()
+                     )) %>%
     mutate(variable = factor(variable, unique(variable)))
-cost.payroll <- read_csv("data/cost_payroll.csv") %>%
+
+cost.payroll <- read_csv("data/cost_payroll.csv",
+                         col_types = cols(
+                           calendar.year = col_integer(),
+                           variable = col_character(),
+                           value = col_double()
+                         )) %>%
     mutate(variable = factor(variable, unique(variable)))
-trust.fund.ratio <- read_csv("data/trust_fund_ratio.csv") %>%
+
+trust.fund.ratio <- read_csv("data/trust_fund_ratio.csv",
+                             col_types = cols(
+                               calendar.year = col_integer(),
+                               variable = col_character(),
+                               value = col_double()
+                             )) %>%
     mutate(variable = factor(variable, unique(variable))) %>%
     mutate(value = value / 100)
-summary <- read_csv("data/summary.csv")
 
-option_text <- read_csv("text/option.csv")
+summary <- read_csv("data/summary.csv",
+                    col_types = cols(
+                      `Option Number` = col_double(),
+                      Option = col_character(),
+                      `Insolvency Year` = col_double(),
+                      `Open Group Unfunded Obligation` = col_character(),
+                      `75-Year Actuarial Balance` = col_character()
+                    ))
+
+option_text <- read_csv("text/option.csv",
+                        col_types = cols(
+                          option = col_character(),
+                          text = col_character(),
+                          oguo1 = col_character(),
+                          oguo2 = col_character(),
+                          oguo3 = col_character(),
+                          insolvency1 = col_character(),
+                          insolvency2 = col_integer(),
+                          insolvency3 = col_character(),
+                          actuarial.balance1 = col_character(),
+                          actuarial.balance2 = col_character(),
+                          actuarial.balance3 = col_character()
+                        ))
 
 ui <- fluidPage(
   

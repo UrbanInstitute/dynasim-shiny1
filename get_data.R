@@ -112,6 +112,11 @@ trust.fund.ratio <- combiner(trust.fund.ratio, "trust.fund.ratio")
 cost.payroll <- combiner(cost.payroll, "cost.taxable.payroll")
 solvency <- combiner(solvency, "income.cost")
   
+rm(scheduled, payable, mini.pia, tax.ssb, cap.spouse, survivor.js75,
+  taxmax90, taxmax90.fica13.4, fica13.4, cola.chaincpi, reduce.cola,
+  increase.fra, increase.fra.era, taxmax150000, taxmax180000, 
+  notaxmax, fica14, fica15, bpc.package)
+
 # Write the data to .csv file
 write_csv(trust.fund.ratio, "data//trust_fund_ratio.csv")
 write_csv(cost.payroll, "data//cost_payroll.csv")
