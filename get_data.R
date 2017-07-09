@@ -117,7 +117,18 @@ rm(scheduled, payable, mini.pia, tax.ssb, cap.spouse, survivor.js75,
   increase.fra, increase.fra.era, taxmax150000, taxmax180000, 
   notaxmax, fica14, fica15, bpc.package)
 
+# Combine into one dataset
+# TODO(aaron): Merge three data sets into one data set with year, option name, 
+# trust fund ratio, cost-payroll, and solvency
+trust.fund.ratio <- trust.fund.ratio %>%
+    rename(trust.fund.ratio = value)
+cost.payroll <- cost.payroll %>%
+    rename(cost.payroll = value)
+solvency <- solvency %>%
+    rename(income.cost = value)
+
+temp <- left_join(trust.fund.ratio, cost.payroll)
+solvency_measures <- left_join(temp, solvency)
+
 # Write the data to .csv file
-write_csv(trust.fund.ratio, "data//trust_fund_ratio.csv")
-write_csv(cost.payroll, "data//cost_payroll.csv")
-write_csv(solvency, "data//solvency.csv")
+write_csv(solvency_measures, "data//solvency_measures.csv")
