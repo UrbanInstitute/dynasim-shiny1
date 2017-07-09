@@ -121,7 +121,9 @@ rm(scheduled, payable, mini.pia, tax.ssb, cap.spouse, survivor.js75,
 # TODO(aaron): Merge three data sets into one data set with year, option name, 
 # trust fund ratio, cost-payroll, and solvency
 trust.fund.ratio <- trust.fund.ratio %>%
-    rename(trust.fund.ratio = value)
+  rename(trust.fund.ratio = value) %>%
+  mutate(trust.fund.ratio = trust.fund.ratio / 100)
+
 cost.payroll <- cost.payroll %>%
     rename(cost.payroll = value)
 solvency <- solvency %>%

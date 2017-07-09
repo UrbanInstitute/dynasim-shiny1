@@ -8,41 +8,25 @@ library(RColorBrewer)
 library(scales)
 
 # Source file for Windows
-Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64c.exe")
+#Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64c.exe")
 #source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R")
-source("urban_institute_themes/urban_theme_windows.R")
+#source("urban_institute_themes/urban_theme_windows.R")
 
 # Source file for Mac
 #source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R")
-#source("urban_institute_themes/urban_theme_mac.R")
+source("urban_institute_themes/urban_theme_mac.R")
 
 latoCSS <- "http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic"
 
 # Load data and gather data into long form for ggplot2
-solvency <- read_csv("data/solvency.csv",
-                     col_types = cols(
-                       calendar.year = col_integer(),
-                       variable = col_character(),
-                       value = col_double()
-                     )) %>%
-    mutate(variable = factor(variable, unique(variable)))
-
-cost.payroll <- read_csv("data/cost_payroll.csv",
-                         col_types = cols(
-                           calendar.year = col_integer(),
-                           variable = col_character(),
-                           value = col_double()
-                         )) %>%
-    mutate(variable = factor(variable, unique(variable)))
-
-trust.fund.ratio <- read_csv("data/trust_fund_ratio.csv",
-                             col_types = cols(
-                               calendar.year = col_integer(),
-                               variable = col_character(),
-                               value = col_double()
-                             )) %>%
-    mutate(variable = factor(variable, unique(variable))) %>%
-    mutate(value = value / 100)
+solvency_measures <- read_csv("data/solvency_measures.csv", 
+                              col_types = cols(
+                                  calendar.year = col_integer(),
+                                  variable = col_character(),
+                                  trust.fund.ratio = col_double(),
+                                  cost.payroll = col_double(),
+                                  income.cost = col_double()
+                              ))
 
 summary <- read_csv("data/summary.csv",
                     col_types = cols(
@@ -160,11 +144,15 @@ ui <- fluidPage(
 
 server <- function(input, output) {
 
+  data_subset <- reactive({
+    solvency_measures %>%
+      filter(variable == "Scheduled Law" | variable == "Payable Law" | variable == input$option)
+  })
+  
   output$plot1 <- renderPlot({ 
    
-    solvency %>%
-      filter(variable == "Scheduled Law" | variable == "Payable Law" | variable == input$option) %>%
-      ggplot(aes(x = calendar.year, y = value, colour = variable)) +
+    data_subset() %>%
+      ggplot(aes(x = calendar.year, y = income.cost, colour = variable)) +
         geom_hline(yintercept = 0) +
         geom_line(size = 1) +
         scale_y_continuous(limits = c(-0.5, 1.5)) +
@@ -178,9 +166,8 @@ server <- function(input, output) {
   
   output$plot2 <- renderPlot({ 
     
-    cost.payroll %>%
-      filter(variable == "Scheduled Law" | variable == "Payable Law" | variable == input$option) %>%
-      ggplot(aes(x = calendar.year, y = value, colour = variable)) +
+    data_subset() %>%
+      ggplot(aes(x = calendar.year, y = cost.payroll, colour = variable)) +
         geom_line(size = 1) +
         scale_y_continuous(limits = c(0, 0.31), expand = c(0, 0)) +
         labs(caption = "DYNASIM3
@@ -193,9 +180,8 @@ server <- function(input, output) {
   
   output$plot3 <- renderPlot({ 
 
-    trust.fund.ratio %>%
-      filter(variable == "Scheduled Law" | variable == "Payable Law" | variable == input$option) %>%
-      ggplot(aes(x = calendar.year, y = value, colour = variable)) +
+    data_subset() %>%
+      ggplot(aes(x = calendar.year, y = trust.fund.ratio, colour = variable)) +
         geom_hline(yintercept = 0) +
         geom_line(size = 1) +
         labs(caption = "DYNASIM3
@@ -208,6 +194,19 @@ server <- function(input, output) {
     
   })
   
+  boom <- solvency_measures %>%
+    filter(variable == "Scheduled Law" | variable == "Payable Law") %>%
+    ggplot(aes(x = calendar.year, y = trust.fund.ratio, colour = variable)) +
+    geom_hline(yintercept = 0) +
+    geom_line(size = 1) +
+    labs(caption = "DYNASIM3
+         Urban Institute") +
+    xlab("Calendar Year") +
+    ylab(NULL) +
+    scale_y_continuous(  limits = c(-20, 5), labels = scales::percent) +
+    theme(plot.margin = margin(t = -5),
+          axis.line = element_blank())    
+
   # Explanation of Social Security Reform
   
   output$text1 <- renderText({
