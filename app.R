@@ -10,11 +10,11 @@ library(scales)
 # Source file for Windows
 #Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64c.exe")
 #source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R")
-#source("urban_institute_themes/urban_theme_windows.R")
+source("urban_institute_themes/urban_theme_windows.R")
 
 # Source file for Mac
 #source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_ggplot_theme.R")
-source("urban_institute_themes/urban_theme_mac.R")
+#source("urban_institute_themes/urban_theme_mac.R")
 
 latoCSS <- "http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic"
 
@@ -138,6 +138,15 @@ ui <- fluidPage(
            HTML("<p>Trust fund ratios are also important for assessing the long-term solvency of the combined OASDI trust fund. If the projected trust fund ratio is positive through the 75-year valuation period and is either level or increasing at the end of the period, then the trust fund is 'sustainably solvent.'</p>"),
            HTML("<p><b>Insolvency Year:</b> The insolvency year is the projected year when the combined OASDI trust fund will no longer be able to pay scheduled benefits in full on a timely basis.  The combined OASDI trust fund is currently expected to turn insolvent in 2034.</p>"),
            HTML("<p><b>Open Group Unfunded Obligation:</b> The open group unfunded obligation is a measure of the total shortfall (or surplus) of the OASDI trust fund over a valuation period in present value dollars.  It is present value non-interest income over the valuation period and starting trust fund asset reserves, minus the present value total costs of the OASDI program. The measure is in present value dollars because an additional dollar saved or earned in any given year has more time to accrue interest as special public-debt obligations in the combined OASDI trust funds than an additional dollar in a later year.</p>")   
+    ),
+    
+    fluidRow(
+      
+      column(8,
+             
+             tags$div(class = "downloader"),
+             
+             downloadButton('download_data', 'Download Charted Data'))
     )
   )
 )
@@ -326,9 +335,17 @@ server <- function(input, output) {
       style = style,
       p(HTML(paste0("<b> Year:  </b>", point$calendar.year,"<br/>",
                     "<b> Ratio: </b>", round(point$trust.fund.ratio, 2), "<br/>"
-                    )))
+      )))
     )
   })
+  
+  output$download_data <- downloadHandler(
+    filename = function() { paste0(input$option, '.csv') },
+    content = function(file) {
+      write_csv(data_subset(), file)
+    }
+  )
+  
 }
 
 shinyApp(ui = ui, server = server)
