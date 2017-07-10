@@ -1,9 +1,9 @@
 ## Libraries and Source Files
 library(shiny)
 library(tidyverse)
-library(extrafont)
-library(grid)
-library(gridExtra)
+#library(extrafont)
+#library(grid)
+#library(gridExtra)
 library(RColorBrewer)
 library(scales)
 
@@ -95,6 +95,12 @@ ui <- fluidPage(
                     "14.4% Payroll Tax" = "14.4% Payroll Tax",
                     "15.4% Payroll Tax" = "15.4% Payroll Tax")),
       
+      downloadButton('download_data', 'Download Charted Data'),
+    
+      br(),
+      br(),
+      br(),
+      
       # Explanation of Social Security Reform
       htmlOutput("text1"),
       htmlOutput("text2"),
@@ -138,15 +144,6 @@ ui <- fluidPage(
            HTML("<p>Trust fund ratios are also important for assessing the long-term solvency of the combined OASDI trust fund. If the projected trust fund ratio is positive through the 75-year valuation period and is either level or increasing at the end of the period, then the trust fund is 'sustainably solvent.'</p>"),
            HTML("<p><b>Insolvency Year:</b> The insolvency year is the projected year when the combined OASDI trust fund will no longer be able to pay scheduled benefits in full on a timely basis.  The combined OASDI trust fund is currently expected to turn insolvent in 2034.</p>"),
            HTML("<p><b>Open Group Unfunded Obligation:</b> The open group unfunded obligation is a measure of the total shortfall (or surplus) of the OASDI trust fund over a valuation period in present value dollars.  It is present value non-interest income over the valuation period and starting trust fund asset reserves, minus the present value total costs of the OASDI program. The measure is in present value dollars because an additional dollar saved or earned in any given year has more time to accrue interest as special public-debt obligations in the combined OASDI trust funds than an additional dollar in a later year.</p>")   
-    ),
-    
-    fluidRow(
-      
-      column(8,
-             
-             tags$div(class = "downloader"),
-             
-             downloadButton('download_data', 'Download Charted Data'))
     )
   )
 )
@@ -197,7 +194,7 @@ server <- function(input, output) {
                         Urban Institute") +
         xlab("Calendar Year") +
         ylab(NULL) +
-        scale_y_continuous(limits = c(-25, 5), labels = scales::percent) +
+        scale_y_continuous(limits = c(-20, 5), labels = scales::percent) +
         theme(plot.margin = margin(t = -5),
               axis.line = element_blank())
     
