@@ -132,3 +132,24 @@ h4 {
 .irs-single {
   font-size:11px;
 }
+
+/* Download Data Button */
+.btn {
+  background-color: #efefef;
+  display: block;  
+  float: left;
+  height: 40px;
+  width: 182px;
+  border: 1px solid #333;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: baseline;  
+  padding: 10px;
+  border-radius: 0px;
+  margin: 0px;
+}
+
+.fa-download:before {
+    content: none;
+}
