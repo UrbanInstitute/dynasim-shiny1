@@ -194,19 +194,6 @@ server <- function(input, output) {
     
   })
   
-  boom <- solvency_measures %>%
-    filter(variable == "Scheduled Law" | variable == "Payable Law") %>%
-    ggplot(aes(x = calendar.year, y = trust.fund.ratio, colour = variable)) +
-    geom_hline(yintercept = 0) +
-    geom_line(size = 1) +
-    labs(caption = "DYNASIM3
-         Urban Institute") +
-    xlab("Calendar Year") +
-    ylab(NULL) +
-    scale_y_continuous(  limits = c(-20, 5), labels = scales::percent) +
-    theme(plot.margin = margin(t = -5),
-          axis.line = element_blank())    
-
   # Explanation of Social Security Reform
   
   output$text1 <- renderText({
@@ -266,7 +253,7 @@ server <- function(input, output) {
   # Chart 1
   output$hover_info1 <- renderUI({
     hover <- input$plot_hover1
-    point <- nearPoints(solvency, hover, threshold = 5, maxpoints = 1, addDist = TRUE)
+    point <- nearPoints(solvency_measures, hover, threshold = 5, maxpoints = 1, addDist = TRUE)
     if (nrow(point) == 0) return(NULL)
         
     # calculate point position inside the image as percent of total dimensions
@@ -278,7 +265,7 @@ server <- function(input, output) {
     left_px <- hover$range$left + left_pct * (hover$range$right - hover$range$left)
     top_px <- hover$range$top + top_pct * (hover$range$bottom - hover$range$top)
     
-    # create style property fot tooltip
+    # create style property for tooltip
     # background color is set so tooltip is a bit transparent
     # z-index is set so we are sure are tooltip will be on top
     style <- paste0("position:absolute; z-index:100; background-color: rgba(245, 245, 245, 0.85); ",
@@ -288,7 +275,7 @@ server <- function(input, output) {
     wellPanel(
       style = style,
       p(HTML(paste0("<b> Year:  </b>", point$calendar.year,"<br/>",
-                    "<b> Ratio: </b>", round(point$value, 2), "<br/>"
+                    "<b> Ratio: </b>", round(point$income.cost, 2), "<br/>"
                     )))
     )
   })
@@ -296,7 +283,7 @@ server <- function(input, output) {
   # Chart 2
   output$hover_info2 <- renderUI({
     hover <- input$plot_hover2
-    point <- nearPoints(cost.payroll, hover, threshold = 5, maxpoints = 1, addDist = TRUE)
+    point <- nearPoints(solvency_measures, hover, threshold = 5, maxpoints = 1, addDist = TRUE)
     if (nrow(point) == 0) return(NULL)
     
     print(point)
@@ -313,7 +300,7 @@ server <- function(input, output) {
     wellPanel(
       style = style,
       p(HTML(paste0("<b> Year:  </b>", point$calendar.year,"<br/>",
-                    "<b> Ratio: </b>", round(point$value, 2), "<br/>"
+                    "<b> Ratio: </b>", round(point$cost.payroll, 2), "<br/>"
                     )))
     )
   })
@@ -321,7 +308,7 @@ server <- function(input, output) {
   # Chart 3
   output$hover_info3 <- renderUI({
     hover <- input$plot_hover3
-    point <- nearPoints(trust.fund.ratio, hover, threshold = 5, maxpoints = 1, addDist = TRUE)
+    point <- nearPoints(solvency_measures, hover, threshold = 5, maxpoints = 1, addDist = TRUE)
     if (nrow(point) == 0) return(NULL)
     
     print(point)
@@ -338,7 +325,7 @@ server <- function(input, output) {
     wellPanel(
       style = style,
       p(HTML(paste0("<b> Year:  </b>", point$calendar.year,"<br/>",
-                    "<b> Ratio: </b>", round(point$value, 2), "<br/>"
+                    "<b> Ratio: </b>", round(point$trust.fund.ratio, 2), "<br/>"
                     )))
     )
   })
