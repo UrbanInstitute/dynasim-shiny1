@@ -87,7 +87,7 @@ ui <- fluidPage(
                     "Chained-CPI COLA" = "Chained-CPI COLA",
                     "Reduce COLA" = "Reduce COLA",
                     "Increase FRA" = "Increase FRA",
-                    "Increase EEA & FRA" = "Increase FRA and EEA",
+                    "Increase FRA & EEA" = "Increase FRA and EEA",
                     "$150,000 Tax Max" = "$150,000 Tax Max",
                     "$180,000 Tax Max" = "$180,000 Tax Max",
                     "Eliminate the Tax Max" = "Eliminate the Tax Max",
@@ -155,7 +155,7 @@ server <- function(input, output) {
       ggplot(aes(x = calendar.year, y = income.cost, colour = variable)) +
         geom_hline(yintercept = 0) +
         geom_line(size = 1) +
-        scale_y_continuous(limits = c(-0.5, 1.5)) +
+        scale_y_continuous(limits = c(-1, 1.5)) +
         labs(title = NULL,
              x = "Calendar Year",
              y = NULL) + 
@@ -188,7 +188,7 @@ server <- function(input, output) {
                         Urban Institute") +
         xlab("Calendar Year") +
         ylab(NULL) +
-        scale_y_continuous(limits = c(-20, 5), labels = scales::percent) +
+        scale_y_continuous(limits = c(-25, 5), labels = scales::percent) +
         theme(plot.margin = margin(t = -5),
               axis.line = element_blank())
     

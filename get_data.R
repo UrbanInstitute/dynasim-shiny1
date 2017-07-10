@@ -118,8 +118,6 @@ rm(scheduled, payable, mini.pia, tax.ssb, cap.spouse, survivor.js75,
   notaxmax, fica14, fica15, bpc.package)
 
 # Combine into one dataset
-# TODO(aaron): Merge three data sets into one data set with year, option name, 
-# trust fund ratio, cost-payroll, and solvency
 trust.fund.ratio <- trust.fund.ratio %>%
   rename(trust.fund.ratio = value) %>%
   mutate(trust.fund.ratio = trust.fund.ratio / 100)
