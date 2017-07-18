@@ -1,9 +1,6 @@
 ## Libraries and Source Files
 library(shiny)
 library(tidyverse)
-#library(extrafont)
-#library(grid)
-#library(gridExtra)
 library(RColorBrewer)
 library(scales)
 
@@ -60,7 +57,7 @@ ui <- fluidPage(
   
   fluidRow(
   
-    column(8,
+    column(12,
            
            titlePanel("Exploring Social Security Reform Options"),
            
@@ -73,7 +70,7 @@ ui <- fluidPage(
   ),
 
   fluidRow(
-    column(4, 
+    column(6, 
       selectInput(inputId = "option", 
         label = "Social Security Reform", 
         choices = c("Scheduled Law and Payable Law" = "NULL",
@@ -109,7 +106,7 @@ ui <- fluidPage(
       
       br(),
 
-    column(4,
+    column(6,
            style = "position:relative",
            
            h4("Income to Benefits Ratio"),
@@ -118,7 +115,7 @@ ui <- fluidPage(
            uiOutput("hover_info1"))),
   
   fluidRow(
-    column(4, 
+    column(6, 
            style = "position:relative",
            
            h4("Cost to Taxable Payroll Ratio"), 
@@ -126,7 +123,7 @@ ui <- fluidPage(
                       hover = hoverOpts("plot_hover2", delay = 100, delayType = "debounce")),
            uiOutput("hover_info2")),
            
-    column(4,
+    column(6,
            style = "position:relative",
            
            h4("Trust Fund Ratio"),
@@ -135,7 +132,7 @@ ui <- fluidPage(
            uiOutput("hover_info3"))),
   
   fluidRow(
-    column(8,
+    column(12,
            h3("Understand the Metrics"),
            HTML("<p><b>Income to Benefits Ratio:</b> The income to benefits ratio measures the adequacy of current OASDI trust fund income to cover current costs and benefits. It is total OASDI income from payroll taxes, taxation of benefits, general fund transfers, and interest divided by the total cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries.</p>"),  
            HTML("<p>When the ratio is one, the Social Security Administration spends one dollar for every dollar it collects or earns from interest. When the ratio is above one, the SSA brings in more money than it spends and the combined OASDI trust fund grows. When the ratio is below one, the SSA brings in less money than it spends and the combined OASDI trust fund shrinks.</p>"),
