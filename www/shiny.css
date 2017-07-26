@@ -47,6 +47,7 @@ h4 {
 
 .selectize-input.items.full.has-options.has-items {
   height: 39px;
+  width: calc(100% - 44px);
 }
 
 .selectize-input.items.full.has-options.has-items.focus.input-active.dropdown-active {
