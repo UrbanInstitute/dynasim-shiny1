@@ -52,6 +52,7 @@ option_text <- read_csv("text/option.csv",
 ui <- fluidPage(
   
   tags$head(tags$link(rel = "stylesheet", type = "text/css", href = latoCSS)),
+  tags$head(tags$script(src="pym.min.js")),
   
   theme = "shiny.css",
   
@@ -108,7 +109,7 @@ ui <- fluidPage(
     column(6,
            style = "position:relative",
            
-           h4("Income to Benefits Ratio"),
+           h4("Income to Cost Ratio"),
            plotOutput("plot1",
                       hover = hoverOpts("plot_hover1", delay = 100, delayType = "throttle")),
            uiOutput("hover_info1"))),
@@ -133,7 +134,7 @@ ui <- fluidPage(
   fluidRow(
     column(12,
            h3("Understand the Metrics"),
-           HTML("<p><b>Income to Benefits Ratio:</b> The income to benefits ratio measures the adequacy of current OASDI trust fund income to cover current costs and benefits. It is total OASDI income from payroll taxes, taxation of benefits, general fund transfers, and interest divided by the total cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries.</p>"),  
+           HTML("<p><b>Income to Cost Ratio:</b> The Income to Cost ratio measures the adequacy of current OASDI trust fund income to cover current costs and benefits. It is total OASDI income from payroll taxes, taxation of benefits, general fund transfers, and interest divided by the total cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries.</p>"),  
            HTML("<p>When the ratio is one, the Social Security Administration spends one dollar for every dollar it collects or earns from interest. When the ratio is above one, the SSA brings in more money than it spends and the combined OASDI trust fund grows. When the ratio is below one, the SSA brings in less money than it spends and the combined OASDI trust fund shrinks.</p>"),
            HTML("<p><b>Annual Cost Rate:</b> The annual cost rate is a measure of the total cost of the OASDI programs compared to all of the taxable earnings in the economy. It is the cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries relative to taxable payroll for the year.  The ratio is projected to grow in the coming years because the baby-boom generation will increase the number of beneficiaries much faster than the number of workers increases.</p>"),
            HTML("<p><b>Trust Fund Ratio:</b> Trust fund ratios measure the percentage of a year’s costs that could be covered solely with money from the combined OASDI trust fund. They are the combined OASDI trust fund asset reserves at the beginning of a year expressed as a percentage of the total cost for the year.  A positive trust fund ratio means the combined OASDI trust fund was solvent in the prior year.</p>"),
@@ -141,7 +142,8 @@ ui <- fluidPage(
            HTML("<p><b>Insolvency Year:</b> The insolvency year is the projected year when the combined OASDI trust fund will no longer be able to pay scheduled benefits in full on a timely basis.  The combined OASDI trust fund is currently expected to turn insolvent in 2034.</p>"),
            HTML("<p><b>Open Group Unfunded Obligation:</b> The open group unfunded obligation is a measure of the total shortfall (or surplus) of the OASDI trust fund over a valuation period in present value dollars.  It is present value non-interest income over the valuation period and starting trust fund asset reserves, minus the present value total costs of the OASDI program. The measure is in present value dollars because an additional dollar saved or earned in any given year has more time to accrue interest as special public-debt obligations in the combined OASDI trust funds than an additional dollar in a later year.</p>")   
     )
-  )
+  ),
+  tags$script(src="activatePym.js")
 )
 
 server <- function(input, output) {
