@@ -18,7 +18,7 @@ readr <- function(sheetname, linknum) {
   #   sheetname: sheet number in "TrustFundSummaryBPC.xlsx"
   # Returns: Clean data frame
   
-  temp.xl <- read_excel("X:\\programs\\run912\\BPCtabs\\Final Spreadsheets\\TrustFundSummaryBPC_actuarial_deficitV4.xlsx", sheet = sheetname, col_names = TRUE, skip = 4)
+  temp.xl <- read_excel("X:/programs/run912/BPCtabs/Final Spreadsheets/TrustFundSummaryBPC_actuarial_deficitV4.xlsx", sheet = sheetname, col_names = TRUE, skip = 4)
   
   temp.xl <- temp.xl %>%
     filter(row_number() > 1 & row_number() < 88) %>%
@@ -34,7 +34,7 @@ combiner <- function(output, var.name) {
   
   output <- data_frame(calendar.year = 2005:2090)
   
-  for (i in 1:19) {
+  for (i in 1:21) {
     
     temp <- dfs[[i]]
     
@@ -65,7 +65,9 @@ combiner <- function(output, var.name) {
            variable = ifelse(variable == "notaxmax", "Eliminate the Tax Max", variable),
            variable = ifelse(variable == "fica14", "14.4% Payroll Tax", variable),
            variable = ifelse(variable == "fica15", "15.4% Payroll Tax", variable),
-           variable = ifelse(variable == "bpc.package", "BPC Package", variable))
+           variable = ifelse(variable == "bpc.package", "BPC Package", variable),
+           variable = ifelse(variable == "BMB", "Basic Minimum Benefit", variable),
+           variable = ifelse(variable == "CPIEcola", "Increase COLA", variable))
   
   return(tbl_df(output))
   
@@ -78,7 +80,7 @@ bpc.options <- c("scheduled", "payable", "mini.pia", "tax.ssb", "cap.spouse",
                  "survivor.js75", "taxmax90", "taxmax90.fica13.4", "fica13.4", 
                  "cola.chaincpi", "reduce.cola", "increase.fra", 
                  "increase.fra.era", "taxmax150000", "taxmax180000", "notaxmax",
-                 "fica14", "fica15", "bpc.package")
+                 "fica14", "fica15", "bpc.package", "BMB", "CPIEcola")
 
 # Run the function on the 19 different excel sheets
 scheduled <- readr("current Law Scheduled", 1)      
@@ -100,12 +102,14 @@ notaxmax <- readr("noTAXMAX", 16)
 fica14 <- readr("Fica14", 17)
 fica15 <- readr("Fica15", 18)
 bpc.package <- readr("bpcrun5supertax", 19)
+bmb <- readr("BMB", 20)
+cpie.cola <- readr("CPIEcola", 21)
 
-# Create a list of the 19 data frames
+# Create a list of the 21 data frames
 dfs <- list(scheduled, payable, mini.pia, tax.ssb, cap.spouse, survivor.js75,
-             taxmax90, taxmax90.fica13.4, fica13.4, cola.chaincpi, reduce.cola,
-             increase.fra, increase.fra.era, taxmax150000, taxmax180000, 
-             notaxmax, fica14, fica15, bpc.package)
+            taxmax90, taxmax90.fica13.4, fica13.4, cola.chaincpi, reduce.cola,
+            increase.fra, increase.fra.era, taxmax150000, taxmax180000, 
+            notaxmax, fica14, fica15, bpc.package, bmb, cpie.cola)
 
 # Create data frame with individual variable from each BPC option
 trust.fund.ratio <- combiner(trust.fund.ratio, "trust.fund.ratio")
@@ -115,7 +119,7 @@ solvency <- combiner(solvency, "income.cost")
 rm(scheduled, payable, mini.pia, tax.ssb, cap.spouse, survivor.js75,
   taxmax90, taxmax90.fica13.4, fica13.4, cola.chaincpi, reduce.cola,
   increase.fra, increase.fra.era, taxmax150000, taxmax180000, 
-  notaxmax, fica14, fica15, bpc.package)
+  notaxmax, fica14, fica15, bpc.package, bmb, cpie.cola)
 
 # Combine into one dataset
 trust.fund.ratio <- trust.fund.ratio %>%
@@ -123,12 +127,14 @@ trust.fund.ratio <- trust.fund.ratio %>%
   mutate(trust.fund.ratio = trust.fund.ratio / 100)
 
 cost.payroll <- cost.payroll %>%
-    rename(cost.payroll = value)
+  rename(cost.payroll = value)
 solvency <- solvency %>%
-    rename(income.cost = value)
+  rename(income.cost = value)
 
 temp <- left_join(trust.fund.ratio, cost.payroll)
+rm(trust.fund.ratio, cost.payroll)
 solvency_measures <- left_join(temp, solvency)
+rm(temp, solvency, bpc.options, dfs)
 
 # Write the data to .csv file
-write_csv(solvency_measures, "data//solvency_measures.csv")
+write_csv(solvency_measures, "data/solvency_measures.csv")

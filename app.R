@@ -28,8 +28,8 @@ solvency_measures <- read_csv("data/solvency_measures.csv",
 summary <- read_csv("data/summary.csv",
                     col_types = cols(
                       `Option Number` = col_double(),
-                      Option = col_character(),
-                      `Insolvency Year` = col_double(),
+                       Option = col_character(),
+                      `Insolvency Year` = col_character(),
                       `Open Group Unfunded Obligation` = col_character(),
                       `75-Year Actuarial Balance` = col_character()
                     ))
@@ -42,7 +42,7 @@ option_text <- read_csv("text/option.csv",
                           oguo2 = col_character(),
                           oguo3 = col_character(),
                           insolvency1 = col_character(),
-                          insolvency2 = col_integer(),
+                          insolvency2 = col_character(),
                           insolvency3 = col_character(),
                           actuarial.balance1 = col_character(),
                           actuarial.balance2 = col_character(),
@@ -75,7 +75,8 @@ ui <- fluidPage(
         label = "Social Security Reform", 
         choices = c("Scheduled Law and Payable Law" = "NULL",
                     "BPC Package" = "BPC Package",
-                    "Annual PIA" = "Annual PIA", 
+                    "Annual PIA" = "Annual PIA",
+                    "Basic Minimum Benefit" = "Basic Minimum Benefit",
                     "Increase Benefits Taxation" = "Increase Benefits Taxation",
                     "Cap Spouse Benefits" = "Cap Spouse Benefits",
                     "75% Survivor Benefit" = "75% Survivor Benefit",
@@ -83,6 +84,7 @@ ui <- fluidPage(
                     "90% Tax Max and 13.4% Payroll Tax" = "90% Tax Max and 13.4% Payroll Tax",
                     "Chained-CPI COLA" = "Chained-CPI COLA",
                     "Reduce COLA" = "Reduce COLA",
+                    "Increase COLA" = "Increase COLA",
                     "Increase FRA" = "Increase FRA",
                     "Increase FRA & EEA" = "Increase FRA and EEA",
                     "$150,000 Tax Max" = "$150,000 Tax Max",
@@ -234,7 +236,7 @@ server <- function(input, output) {
     as.character(
       option_text %>%
         filter(option == input$option) %>%
-        mutate(text3 = paste(insolvency1, as.character(insolvency.year), insolvency3)) %>%
+        mutate(text3 = paste(insolvency1, insolvency.year, insolvency3)) %>%
         select(text3)
     )
   }) 
