@@ -18,7 +18,7 @@ readr <- function(sheetname, linknum) {
   #   sheetname: sheet number in "TrustFundSummaryBPC.xlsx"
   # Returns: Clean data frame
   
-  temp.xl <- read_excel("X:\\programs\\run912\\BPCtabs\\Final Spreadsheets\\TrustFundSummaryBPC_actuarial_deficitV4.xlsx", sheet = sheetname, col_names = TRUE, skip = 4)
+  temp.xl <- read_excel("X:/programs/run912/BPCtabs/Final Spreadsheets/TrustFundSummaryBPC_actuarial_deficitV4.xlsx", sheet = sheetname, col_names = TRUE, skip = 4)
   
   temp.xl <- temp.xl %>%
     filter(row_number() > 1 & row_number() < 88) %>%
@@ -66,8 +66,8 @@ combiner <- function(output, var.name) {
            variable = ifelse(variable == "fica14", "14.4% Payroll Tax", variable),
            variable = ifelse(variable == "fica15", "15.4% Payroll Tax", variable),
            variable = ifelse(variable == "bpc.package", "BPC Package", variable),
-           variable = ifelse(variable == "bmb", "Basic Minimum Benefit", variable),
-           variable = ifelse(variable == "cpie.cola", "Increase COLA", variable))
+           variable = ifelse(variable == "BMB", "Basic Minimum Benefit", variable),
+           variable = ifelse(variable == "CPIEcola", "Increase COLA", variable))
   
   return(tbl_df(output))
   
@@ -137,4 +137,4 @@ solvency_measures <- left_join(temp, solvency)
 rm(temp, solvency, bpc.options, dfs)
 
 # Write the data to .csv file
-write_csv(solvency_measures, "data//solvency_measures.csv")
+write_csv(solvency_measures, "data/solvency_measures.csv")
