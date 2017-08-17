@@ -84,6 +84,8 @@ ui <- fluidPage(
                     "90% Tax Max and 13.4% Payroll Tax" = "90% Tax Max and 13.4% Payroll Tax",
                     "Chained-CPI COLA" = "Chained-CPI COLA",
                     "Reduce COLA" = "Reduce COLA",
+                    "Cap COLA" = "Cap COLA", 
+                    "Increase COLA" = "Increase COLA",
                     "Increase COLA" = "Increase COLA",
                     "Increase FRA" = "Increase FRA",
                     "Increase FRA & EEA" = "Increase FRA and EEA",
