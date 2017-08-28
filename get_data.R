@@ -34,7 +34,7 @@ combiner <- function(output, var.name) {
   
   output <- data_frame(calendar.year = 2005:2090)
   
-  for (i in 1:21) {
+  for (i in 1:22) {
     
     temp <- dfs[[i]]
     
@@ -67,7 +67,8 @@ combiner <- function(output, var.name) {
            variable = ifelse(variable == "fica15", "15.4% Payroll Tax", variable),
            variable = ifelse(variable == "bpc.package", "BPC Package", variable),
            variable = ifelse(variable == "BMB", "Basic Minimum Benefit", variable),
-           variable = ifelse(variable == "CPIEcola", "Increase COLA", variable))
+           variable = ifelse(variable == "CPIEcola", "Increase COLA", variable),
+           variable = ifelse(variable == "CapCOLA", "Cap COLA", variable))
   
   return(tbl_df(output))
   
@@ -80,7 +81,7 @@ bpc.options <- c("scheduled", "payable", "mini.pia", "tax.ssb", "cap.spouse",
                  "survivor.js75", "taxmax90", "taxmax90.fica13.4", "fica13.4", 
                  "cola.chaincpi", "reduce.cola", "increase.fra", 
                  "increase.fra.era", "taxmax150000", "taxmax180000", "notaxmax",
-                 "fica14", "fica15", "bpc.package", "BMB", "CPIEcola")
+                 "fica14", "fica15", "bpc.package", "BMB", "CPIEcola", "CapCOLA")
 
 # Run the function on the 19 different excel sheets
 scheduled <- readr("current Law Scheduled", 1)      
@@ -104,12 +105,13 @@ fica15 <- readr("Fica15", 18)
 bpc.package <- readr("bpcrun5supertax", 19)
 bmb <- readr("BMB", 20)
 cpie.cola <- readr("CPIEcola", 21)
+cap.cola <- readr("CapCOLA", 22)
 
 # Create a list of the 21 data frames
 dfs <- list(scheduled, payable, mini.pia, tax.ssb, cap.spouse, survivor.js75,
             taxmax90, taxmax90.fica13.4, fica13.4, cola.chaincpi, reduce.cola,
             increase.fra, increase.fra.era, taxmax150000, taxmax180000, 
-            notaxmax, fica14, fica15, bpc.package, bmb, cpie.cola)
+            notaxmax, fica14, fica15, bpc.package, bmb, cpie.cola, cap.cola)
 
 # Create data frame with individual variable from each BPC option
 trust.fund.ratio <- combiner(trust.fund.ratio, "trust.fund.ratio")
@@ -119,7 +121,7 @@ solvency <- combiner(solvency, "income.cost")
 rm(scheduled, payable, mini.pia, tax.ssb, cap.spouse, survivor.js75,
   taxmax90, taxmax90.fica13.4, fica13.4, cola.chaincpi, reduce.cola,
   increase.fra, increase.fra.era, taxmax150000, taxmax180000, 
-  notaxmax, fica14, fica15, bpc.package, bmb, cpie.cola)
+  notaxmax, fica14, fica15, bpc.package, bmb, cpie.cola, cap.cola)
 
 # Combine into one dataset
 trust.fund.ratio <- trust.fund.ratio %>%

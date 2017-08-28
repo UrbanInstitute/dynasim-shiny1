@@ -36,3 +36,6 @@ vignettes/*.pdf
 
 # OS X System Files
 .DS_Store
+
+# Windows System Files
+*.DB
