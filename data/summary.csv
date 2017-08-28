@@ -8,8 +8,8 @@ Option Number,Option,Insolvency Year,Open Group Unfunded Obligation,75-Year Actu
 5,90% Tax Max,2041,$7.47 trillion,-1.75%
 6,90% Tax Max and 13.4% Payroll Tax,2059,$3.41 trillion,-0.88%
 7,13.4% Payroll Tax,2039,$7.52 trillion,-1.93%
-8,Partial Chained-CPI COLA,2035,$8.94 trillion,-2.26%
-9,Full Chained-CPI COLA,2035,$9.27 trillion,-2.34%
+8,Chained-CPI COLA,2035,$8.94 trillion,-2.26%
+9,Reduce COLA,2035,$9.27 trillion,-2.34%
 10,Increase FRA,2034,$9.17 trillion,-2.30%
 11,Increase FRA and EEA,2034,$9.09 trillion,-2.28%
 12,"$150,000 Tax Max",2035,$9.9 trillion,-2.41%

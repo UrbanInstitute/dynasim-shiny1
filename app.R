@@ -62,8 +62,7 @@ ui <- fluidPage(
            
            titlePanel("Exploring Social Security Reform Options"),
            
-           p("The Social Security trustees project that, by the mid-2030s, the system will no longer be able to pay all scheduled benefits. Which reform option should policymakers pursue to help balance the system?
-             Use our interactive tool to compare how different groups would fare, over time, under the following policy options."),
+           p("The Social Security trustees estimate that by the mid-2030s, the system will no longer be able to pay all scheduled benefits. Which reform option should policymakers pursue to help balance the system? Use our interactive tools to compare how the Social Security trust funds and different groups would fare over time under different policy options."),
            
            br()
            )
@@ -73,28 +72,27 @@ ui <- fluidPage(
     column(6, 
       selectInput(inputId = "option", 
         label = "Social Security Reform", 
-        choices = c("Scheduled Law and Payable Law" = "NULL",
-                    "BPC Package" = "BPC Package",
-                    "Annual PIA" = "Annual PIA",
-                    "Basic Minimum Benefit" = "Basic Minimum Benefit",
-                    "Increase Benefits Taxation" = "Increase Benefits Taxation",
-                    "Cap Spouse Benefits" = "Cap Spouse Benefits",
-                    "75% Survivor Benefit" = "75% Survivor Benefit",
-                    "90% Tax Max" = "90% Tax Max",
-                    "90% Tax Max and 13.4% Payroll Tax" = "90% Tax Max and 13.4% Payroll Tax",
+        choices = c("Scheduled law and payable law" = "NULL",
+                    "BPC package" = "BPC Package",
+                    "Annual primary insurance amount" = "Annual PIA",
+                    "Basic minimum benefit" = "Basic Minimum Benefit",
+                    "Increase benefits taxation" = "Increase Benefits Taxation",
+                    "Cap spouse benefits" = "Cap Spouse Benefits",
+                    "75 percent survivor benefit" = "75% Survivor Benefit",
+                    "90 percent tax max" = "90% Tax Max",
+                    "90% tax max and 13.4% payroll tax" = "90% Tax Max and 13.4% Payroll Tax",
                     "Chained-CPI COLA" = "Chained-CPI COLA",
                     "Reduce COLA" = "Reduce COLA",
                     "Cap COLA" = "Cap COLA", 
                     "Increase COLA" = "Increase COLA",
-                    "Increase COLA" = "Increase COLA",
                     "Increase FRA" = "Increase FRA",
                     "Increase FRA & EEA" = "Increase FRA and EEA",
-                    "$150,000 Tax Max" = "$150,000 Tax Max",
-                    "$180,000 Tax Max" = "$180,000 Tax Max",
-                    "Eliminate the Tax Max" = "Eliminate the Tax Max",
-                    "13.4% Payroll Tax" = "13.4% Payroll Tax",
-                    "14.4% Payroll Tax" = "14.4% Payroll Tax",
-                    "15.4% Payroll Tax" = "15.4% Payroll Tax")),
+                    "$150,000 tax max" = "$150,000 Tax Max",
+                    "$180,000 tax max" = "$180,000 Tax Max",
+                    "Eliminate the tax max" = "Eliminate the Tax Max",
+                    "13.4 percent payroll tax" = "13.4% Payroll Tax",
+                    "14.4 percent payroll tax" = "14.4% Payroll Tax",
+                    "15.4 percent payroll tax" = "15.4% Payroll Tax")),
       
       downloadButton('download_data', 'Download Charted Data'),
     
@@ -138,16 +136,16 @@ ui <- fluidPage(
   fluidRow(
     column(12,
            h3("Understand the Metrics"),
-           HTML("<p><b>Income to Cost Ratio:</b> The Income to Cost ratio measures the adequacy of current OASDI trust fund income to cover current costs and benefits. It is total OASDI income from payroll taxes, taxation of benefits, general fund transfers, and interest divided by the total cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries.</p>"),  
-           HTML("<p>When the ratio is one, the Social Security Administration spends one dollar for every dollar it collects or earns from interest. When the ratio is above one, the SSA brings in more money than it spends and the combined OASDI trust fund grows. When the ratio is below one, the SSA brings in less money than it spends and the combined OASDI trust fund shrinks.</p>"),
-           HTML("<p><b>Annual Cost Rate:</b> The annual cost rate is a measure of the total cost of the OASDI programs compared to all of the taxable earnings in the economy. It is the cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries relative to taxable payroll for the year.  The ratio is projected to grow in the coming years because the baby-boom generation will increase the number of beneficiaries much faster than the number of workers increases.</p>"),
-           HTML("<p><b>Trust Fund Ratio:</b> Trust fund ratios measure the percentage of a year’s costs that could be covered solely with money from the combined OASDI trust fund. They are the combined OASDI trust fund asset reserves at the beginning of a year expressed as a percentage of the total cost for the year.  A positive trust fund ratio means the combined OASDI trust fund was solvent in the prior year.</p>"),
-           HTML("<p>Trust fund ratios are also important for assessing the long-term solvency of the combined OASDI trust fund. If the projected trust fund ratio is positive through the 75-year valuation period and is either level or increasing at the end of the period, then the trust fund is 'sustainably solvent.'</p>"),
-           HTML("<p><b>Insolvency Year:</b> The insolvency year is the projected year when the combined OASDI trust fund will no longer be able to pay scheduled benefits in full on a timely basis.  The combined OASDI trust fund is currently expected to turn insolvent in 2034.</p>"),
-           HTML("<p><b>Open Group Unfunded Obligation:</b> The open group unfunded obligation is a measure of the total shortfall (or surplus) of the OASDI trust fund over a valuation period in present value dollars.  It is present value non-interest income over the valuation period and starting trust fund asset reserves, minus the present value total costs of the OASDI program. The measure is in present value dollars because an additional dollar saved or earned in any given year has more time to accrue interest as special public-debt obligations in the combined OASDI trust funds than an additional dollar in a later year.</p>")   
+           HTML("<p><b>Income-to-cost ratio:</b> Measures the adequacy of current OASDI trust fund income to cover current costs and benefits. The ratio is measured as total OASDI income from payroll taxes, taxation of benefits, general fund transfers, and interest divided by the total cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries.</p>"),  
+           HTML("<p>When the ratio is one, the Social Security Administration spends one dollar for every dollar it collects or earns from interest. When the ratio is above one, the Social Security Administration brings in more money than it spends and the combined OASDI trust fund grows. When the ratio is below one, the Social Security Administration brings in less money than it spends and the combined OASDI trust fund shrinks.</p>"),
+           HTML("<p><b>Annual cost rate:</b> The ratio of the total cost of OASDI programs to all taxable earnings in the economy. The ratio is measured as the cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries relative to taxable payroll for the year. The ratio is projected to grow in coming years because the baby boomers will increase the number of beneficiaries more quickly than the growth in taxable payroll.</p>"),
+           HTML("<p><b>Trust fund ratio:</b> The percentage of a year’s costs that could be covered solely with money from the combined OASDI trust fund. They are the combined OASDI trust fund asset reserves at the beginning of a year expressed as a percentage of the total cost for the year. A positive trust fund ratio means the combined OASDI trust fund was solvent in the previous year.</p>"),
+           HTML("<p>Trust fund ratios are also important for assessing the long-term solvency of the combined OASDI trust fund. If the projected trust fund ratio is positive through the 75-year valuation period and is either level or increasing at the end of the period, then the trust fund is “sustainably solvent.”</p>"),
+           HTML("<p><b>Insolvency year:</b> The projected year when the combined OASDI trust fund will no longer be able to pay scheduled benefits in full on a timely basis. The combined OASDI trust fund is currently expected to turn insolvent in 2034.</p>"),
+           HTML("<p><b>Open group unfunded obligation:</b> A measure of the total shortfall (or surplus) of the OASDI trust fund over a valuation period in present value dollars. It is present value noninterest income over the valuation period and starting trust fund asset reserves, minus the present value total costs of the OASDI program. The measure is in present value dollars because an additional dollar saved or earned in any given year has more time to accrue interest as special public-debt obligations in the combined OASDI trust funds than an additional dollar in a later year.</p>")   
     )
   ),
-  tags$script(src="activatePym.js")
+  tags$script(src = "activatePym.js")
 )
 
 server <- function(input, output) {
