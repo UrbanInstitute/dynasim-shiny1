@@ -5,8 +5,9 @@ library(RColorBrewer)
 library(scales)
 
 # Source file for Windows
-#Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64c.exe")
+Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64c.exe")
 #source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R")
+
 source("urban_institute_themes/urban_theme_windows.R")
 
 # Source file for Mac
