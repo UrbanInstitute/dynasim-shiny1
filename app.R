@@ -24,7 +24,8 @@ solvency_measures <- read_csv("data/solvency_measures.csv",
                                   trust.fund.ratio = col_double(),
                                   cost.payroll = col_double(),
                                   income.cost = col_double()
-                              ))
+                              )) %>%
+  mutate(variable = factor(variable, levels = unique(variable)))
 
 summary <- read_csv("data/summary.csv",
                     col_types = cols(
@@ -74,28 +75,28 @@ ui <- fluidPage(
       selectInput(inputId = "option", 
         label = "Social Security Reform", 
         choices = c("Scheduled law and payable law" = "NULL",
-                    "BPC package" = "BPC Package",
-                    "Annual primary insurance amount" = "Annual PIA",
-                    "Basic minimum benefit" = "Basic Minimum Benefit",
-                    "Increase benefits taxation" = "Increase Benefits Taxation",
-                    "Cap spouse benefits" = "Cap Spouse Benefits",
-                    "75 percent survivor benefit" = "75% Survivor Benefit",
-                    "90 percent tax max" = "90% Tax Max",
-                    "90% tax max and 13.4% payroll tax" = "90% Tax Max and 13.4% Payroll Tax",
+                    "BPC package" = "BPC package",
+                    "Annual primary insurance amount" = "Annual primary insurance amount",
+                    "Basic minimum benefit" = "Basic minimum benefit",
+                    "Increase benefits taxation" = "Increase benefits taxation",
+                    "Cap spouse benefits" = "Cap spouse benefits",
+                    "75 percent survivor benefit" = "75 percent survivor benefit",
+                    "90 percent tax max" = "90 percent tax max",
+                    "90% tax max and 13.4% payroll tax" = "90% tax max and 13.4% payroll tax",
                     "Chained-CPI COLA" = "Chained-CPI COLA",
                     "Reduce COLA" = "Reduce COLA",
                     "Cap COLA" = "Cap COLA", 
                     "Increase COLA" = "Increase COLA",
                     "Increase FRA" = "Increase FRA",
                     "Increase FRA & EEA" = "Increase FRA and EEA",
-                    "$150,000 tax max" = "$150,000 Tax Max",
-                    "$180,000 tax max" = "$180,000 Tax Max",
-                    "Eliminate the tax max" = "Eliminate the Tax Max",
-                    "13.4 percent payroll tax" = "13.4% Payroll Tax",
-                    "14.4 percent payroll tax" = "14.4% Payroll Tax",
-                    "15.4 percent payroll tax" = "15.4% Payroll Tax")),
+                    "$150,000 tax max" = "$150,000 tax max",
+                    "$180,000 tax max" = "$180,000 tax max",
+                    "Eliminate the tax max" = "Eliminate the tax max",
+                    "13.4 percent payroll tax" = "13.4 percent payroll tax",
+                    "14.4 percent payroll tax" = "14.4 percent payroll tax",
+                    "15.4 percent payroll tax" = "15.4 percent payroll tax")),
       
-      downloadButton('download_data', 'Download Charted Data'),
+      downloadButton('download_data', 'Download charted data'),
     
       br(),
       br(),
@@ -112,7 +113,7 @@ ui <- fluidPage(
     column(6,
            style = "position:relative",
            
-           h4("Income to Cost Ratio"),
+           h4("Income-to-cost ratio"),
            plotOutput("plot1",
                       hover = hoverOpts("plot_hover1", delay = 100, delayType = "throttle")),
            uiOutput("hover_info1"))),
@@ -121,7 +122,7 @@ ui <- fluidPage(
     column(6, 
            style = "position:relative",
            
-           h4("Cost to Taxable Payroll Ratio"), 
+           h4("Annual cost rate (cost-to-taxable payroll ratio)"), 
            plotOutput("plot2",
                       hover = hoverOpts("plot_hover2", delay = 100, delayType = "debounce")),
            uiOutput("hover_info2")),
@@ -129,7 +130,7 @@ ui <- fluidPage(
     column(6,
            style = "position:relative",
            
-           h4("Trust Fund Ratio"),
+           h4("Trust fund ratio"),
            plotOutput("plot3",
                       hover = hoverOpts("plot_hover3", delay = 100, delayType = "debounce")),
            uiOutput("hover_info3"))),
@@ -139,7 +140,7 @@ ui <- fluidPage(
            h3("Understand the Metrics"),
            HTML("<p><b>Income-to-cost ratio:</b> Measures the adequacy of current OASDI trust fund income to cover current costs and benefits. The ratio is measured as total OASDI income from payroll taxes, taxation of benefits, general fund transfers, and interest divided by the total cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries.</p>"),  
            HTML("<p>When the ratio is one, the Social Security Administration spends one dollar for every dollar it collects or earns from interest. When the ratio is above one, the Social Security Administration brings in more money than it spends and the combined OASDI trust fund grows. When the ratio is below one, the Social Security Administration brings in less money than it spends and the combined OASDI trust fund shrinks.</p>"),
-           HTML("<p><b>Annual cost rate:</b> The ratio of the total cost of OASDI programs to all taxable earnings in the economy. The ratio is measured as the cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries relative to taxable payroll for the year. The ratio is projected to grow in coming years because the baby boomers will increase the number of beneficiaries more quickly than the growth in taxable payroll.</p>"),
+           HTML("<p><b>Annual cost rate (cost-to-taxable payroll ratio):</b> The ratio of the total cost of OASDI programs to all taxable earnings in the economy. The ratio is measured as the cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries relative to taxable payroll for the year. The ratio is projected to grow in coming years because the baby boomers will increase the number of beneficiaries more quickly than the growth in taxable payroll.</p>"),
            HTML("<p><b>Trust fund ratio:</b> The percentage of a year’s costs that could be covered solely with money from the combined OASDI trust fund. They are the combined OASDI trust fund asset reserves at the beginning of a year expressed as a percentage of the total cost for the year. A positive trust fund ratio means the combined OASDI trust fund was solvent in the previous year.</p>"),
            HTML("<p>Trust fund ratios are also important for assessing the long-term solvency of the combined OASDI trust fund. If the projected trust fund ratio is positive through the 75-year valuation period and is either level or increasing at the end of the period, then the trust fund is “sustainably solvent.”</p>"),
            HTML("<p><b>Insolvency year:</b> The projected year when the combined OASDI trust fund will no longer be able to pay scheduled benefits in full on a timely basis. The combined OASDI trust fund is currently expected to turn insolvent in 2034.</p>"),
@@ -153,7 +154,7 @@ server <- function(input, output) {
 
   data_subset <- reactive({
     solvency_measures %>%
-      filter(variable == "Scheduled Law" | variable == "Payable Law" | variable == input$option)
+      filter(variable == "Scheduled law" | variable == "Payable law" | variable == input$option)
   })
   
   output$plot1 <- renderPlot({ 
@@ -164,7 +165,7 @@ server <- function(input, output) {
         geom_line(size = 1) +
         scale_y_continuous(limits = c(-1, 1.5)) +
         labs(title = NULL,
-             x = "Calendar Year",
+             x = "Calendar year",
              y = NULL) + 
         theme(plot.margin = margin(t = -5),
               axis.line = element_blank())
@@ -179,7 +180,7 @@ server <- function(input, output) {
         scale_y_continuous(limits = c(0, 0.31), expand = c(0, 0)) +
         labs(caption = "DYNASIM3
                         Urban Institute") + 
-        xlab("Calendar Year") +
+        xlab("Calendar year") +
         ylab(NULL) +
         theme(plot.margin = margin(t = -5))
     
@@ -193,7 +194,7 @@ server <- function(input, output) {
         geom_line(size = 1) +
         labs(caption = "DYNASIM3
                         Urban Institute") +
-        xlab("Calendar Year") +
+        xlab("Calendar year") +
         ylab(NULL) +
         scale_y_continuous(limits = c(-20, 5), labels = scales::percent) +
         theme(plot.margin = margin(t = -5),
@@ -215,7 +216,7 @@ server <- function(input, output) {
   output$text2 <- renderText({
     
     open.group.unfunded.liability <- summary %>%
-      mutate(Option = ifelse(Option == "Current Law Scheduled", "NULL", Option)) %>%
+      mutate(Option = ifelse(Option == "Current law scheduled", "NULL", Option)) %>%
       filter(Option == input$option) %>%
       select(`Open Group Unfunded Obligation`)
     
@@ -230,7 +231,7 @@ server <- function(input, output) {
   output$text3 <- renderText({
     
     insolvency.year <- summary %>%
-      mutate(Option = ifelse(Option == "Current Law Scheduled", "NULL", Option)) %>%
+      mutate(Option = ifelse(Option == "Current law scheduled", "NULL", Option)) %>%
       filter(Option == input$option) %>%
       select(`Insolvency Year`)
     
@@ -245,7 +246,7 @@ server <- function(input, output) {
   output$text4 <- renderText({
     
     actuarial.balance <- summary %>%
-      mutate(Option = ifelse(Option == "Current Law Scheduled", "NULL", Option)) %>%
+      mutate(Option = ifelse(Option == "Current law scheduled", "NULL", Option)) %>%
       filter(Option == input$option) %>%
       select(`75-Year Actuarial Balance`)
   
