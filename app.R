@@ -223,7 +223,7 @@ server <- function(input, output) {
     as.character(
       option_text %>%
         filter(option == input$option) %>%
-        mutate(text2 = paste(oguo1, as.character(open.group.unfunded.liability), oguo3)) %>%
+        mutate(text2 = paste0(oguo1, " ", as.character(open.group.unfunded.liability), oguo3)) %>%
         select(text2)
     )
   })
@@ -238,7 +238,7 @@ server <- function(input, output) {
     as.character(
       option_text %>%
         filter(option == input$option) %>%
-        mutate(text3 = paste(insolvency1, insolvency.year, insolvency3)) %>%
+        mutate(text3 = paste0(insolvency1, " ", insolvency.year, insolvency3)) %>%
         select(text3)
     )
   }) 
@@ -253,7 +253,7 @@ server <- function(input, output) {
     as.character(
       option_text %>%
         filter(option == input$option) %>%
-        mutate(text4 = paste(actuarial.balance1, as.character(actuarial.balance), actuarial.balance3)) %>%
+        mutate(text4 = paste0(actuarial.balance1, " ", as.character(actuarial.balance), actuarial.balance3)) %>%
         select(text4)
     )
   })   
