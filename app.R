@@ -266,7 +266,7 @@ server <- function(input, output) {
   # Chart 1
   output$hover_info1 <- renderUI({
     hover <- input$plot_hover1
-    point <- nearPoints(solvency_measures, hover, threshold = 5, maxpoints = 1, addDist = TRUE)
+    point <- nearPoints(data_subset(), hover, threshold = 20, maxpoints = 1, addDist = TRUE)
     if (nrow(point) == 0) return(NULL)
         
     # calculate point position inside the image as percent of total dimensions
@@ -296,7 +296,7 @@ server <- function(input, output) {
   # Chart 2
   output$hover_info2 <- renderUI({
     hover <- input$plot_hover2
-    point <- nearPoints(solvency_measures, hover, threshold = 5, maxpoints = 1, addDist = TRUE)
+    point <- nearPoints(data_subset(), hover, threshold = 20, maxpoints = 1, addDist = TRUE)
     if (nrow(point) == 0) return(NULL)
     
     print(point)
@@ -321,7 +321,7 @@ server <- function(input, output) {
   # Chart 3
   output$hover_info3 <- renderUI({
     hover <- input$plot_hover3
-    point <- nearPoints(solvency_measures, hover, threshold = 5, maxpoints = 1, addDist = TRUE)
+    point <- nearPoints(data_subset(), hover, threshold = 20, maxpoints = 1, addDist = TRUE)
     if (nrow(point) == 0) return(NULL)
     
     print(point)
