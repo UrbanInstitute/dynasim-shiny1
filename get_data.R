@@ -18,7 +18,7 @@ readr <- function(sheetname, linknum) {
   #   sheetname: sheet number in "TrustFundSummaryBPC.xlsx"
   # Returns: Clean data frame
   
-  temp.xl <- read_excel("X:/programs/run912/BPCtabs/Final Spreadsheets/TrustFundSummaryBPC_actuarial_deficitV4.xlsx", sheet = sheetname, col_names = TRUE, skip = 4)
+  temp.xl <- read_excel("X:/programs/run912/BPCtabs/Final Spreadsheets/TrustFundSummaryBPC_actuarial_deficitV5.xlsx", sheet = sheetname, col_names = TRUE, skip = 4)
   
   temp.xl <- temp.xl %>%
     filter(row_number() > 1 & row_number() < 88) %>%

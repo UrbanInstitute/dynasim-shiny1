@@ -6,6 +6,12 @@ h4 {
   color: #000000;
 }
 
+/* Eliminate padding from entire application */
+.container-fluid {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .selectize-control {
   border: black;
 	text-align: left;

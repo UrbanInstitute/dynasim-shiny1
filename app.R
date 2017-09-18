@@ -4,6 +4,9 @@ library(tidyverse)
 library(RColorBrewer)
 library(scales)
 
+# Set options
+options(shiny.sanitize.errors = TRUE)
+
 # Source file for Windows
 Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64c.exe")
 #source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R")
@@ -54,7 +57,7 @@ option_text <- read_csv("text/option.csv",
 ui <- fluidPage(
   
   tags$head(tags$link(rel = "stylesheet", type = "text/css", href = latoCSS)),
-  tags$head(tags$script(src="pym.min.js")),
+  tags$head(tags$script(src = "pym.min.js")),
   
   theme = "shiny.css",
   
@@ -62,9 +65,11 @@ ui <- fluidPage(
   
     column(12,
            
-           titlePanel("Exploring Social Security Reform Options"),
-           
-           p("The Social Security trustees estimate that by the mid-2030s, the system will no longer be able to pay all scheduled benefits. Which reform option should policymakers pursue to help balance the system? Use our interactive tools to compare how the Social Security trust funds and different groups would fare over time under different policy options."),
+           p("The Social Security trustees estimate that by the mid-2030s, the 
+             system will no longer be able to pay all scheduled benefits. Which 
+             reforms should policymakers pursue to help balance the system? Use 
+             this interactive to explore how the Social Security trust funds 
+             would fare over time under different reforms."),
            
            br()
            )
@@ -261,7 +266,7 @@ server <- function(input, output) {
   # Chart 1
   output$hover_info1 <- renderUI({
     hover <- input$plot_hover1
-    point <- nearPoints(solvency_measures, hover, threshold = 5, maxpoints = 1, addDist = TRUE)
+    point <- nearPoints(data_subset(), hover, threshold = 20, maxpoints = 1, addDist = TRUE)
     if (nrow(point) == 0) return(NULL)
         
     # calculate point position inside the image as percent of total dimensions
@@ -291,7 +296,7 @@ server <- function(input, output) {
   # Chart 2
   output$hover_info2 <- renderUI({
     hover <- input$plot_hover2
-    point <- nearPoints(solvency_measures, hover, threshold = 5, maxpoints = 1, addDist = TRUE)
+    point <- nearPoints(data_subset(), hover, threshold = 20, maxpoints = 1, addDist = TRUE)
     if (nrow(point) == 0) return(NULL)
     
     print(point)
@@ -316,7 +321,7 @@ server <- function(input, output) {
   # Chart 3
   output$hover_info3 <- renderUI({
     hover <- input$plot_hover3
-    point <- nearPoints(solvency_measures, hover, threshold = 5, maxpoints = 1, addDist = TRUE)
+    point <- nearPoints(data_subset(), hover, threshold = 20, maxpoints = 1, addDist = TRUE)
     if (nrow(point) == 0) return(NULL)
     
     print(point)
