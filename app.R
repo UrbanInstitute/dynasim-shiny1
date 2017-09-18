@@ -4,6 +4,9 @@ library(tidyverse)
 library(RColorBrewer)
 library(scales)
 
+# Set options
+options(shiny.sanitize.errors = TRUE)
+
 # Source file for Windows
 Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs9.20\\bin\\gswin64c.exe")
 #source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/temp-windows/urban_ggplot_theme.R")
@@ -54,7 +57,7 @@ option_text <- read_csv("text/option.csv",
 ui <- fluidPage(
   
   tags$head(tags$link(rel = "stylesheet", type = "text/css", href = latoCSS)),
-  tags$head(tags$script(src="pym.min.js")),
+  tags$head(tags$script(src = "pym.min.js")),
   
   theme = "shiny.css",
   
