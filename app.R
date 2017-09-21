@@ -19,6 +19,8 @@ source("urban_institute_themes/urban_theme_windows.R")
 
 latoCSS <- "http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic"
 
+
+
 # Load data and gather data into long form for ggplot2
 solvency_measures <- read_csv("data/solvency_measures.csv", 
                               col_types = cols(
@@ -57,7 +59,9 @@ option_text <- read_csv("text/option.csv",
 ui <- fluidPage(
   
   tags$head(tags$link(rel = "stylesheet", type = "text/css", href = latoCSS)),
+  tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap.css")),
   tags$head(tags$script(src = "pym.min.js")),
+  
   
   theme = "shiny.css",
   
