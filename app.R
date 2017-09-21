@@ -152,6 +152,33 @@ ui <- fluidPage(
            HTML("<p><b>Open group unfunded obligation:</b> A measure of the total shortfall (or surplus) of the OASDI trust fund over a valuation period in present value dollars. It is present value noninterest income over the valuation period and starting trust fund asset reserves, minus the present value total costs of the OASDI program. The measure is in present value dollars because an additional dollar saved or earned in any given year has more time to accrue interest as special public-debt obligations in the combined OASDI trust funds than an additional dollar in a later year.</p>")   
     )
   ),
+  
+  br(),
+  
+  fluidRow(
+    column(6,
+           h3("About the data"),
+           HTML("<p>The Urban Institute’s Dynamic Simulation of Income Model (DYNASIM) projects the size and characteristics (such as financial, health, and disability status) 
+                of the US population for the next 75 years. Using the best and most recent data available, it helps sort out how profound social, economic, and demographic 
+                shifts will likely affect older adults and their retirement as well astaxpayers, business, and government. The model can also show how outcomes would likely 
+                evolve under changes to public policies, business practices, or individual behaviors.</p>"),
+           HTML("<p><a href='https://www.urban.org/node/65826'>Read the DYNASIM primer</a></p>"),
+           HTML("<p><a href='https://www.urban.org/research/publication/dynamic-simulation-income-model-dynasim-overview'>Review the DYNASIM documentation</a></p>")
+           
+           ),
+    column(6,
+           h3("Project Credits"),
+           HTML("<p><i>This work was funded by the US Department of Labor’s Employee Benefits Security Administration. 
+                We are grateful to them and to all our funders, who make it possible for Urban Institute to advance its mission.</i></p> 
+                <p><i>The views expressed are those of the authors and should not be attributed to the Urban Institute, its trustees, 
+                or its funders. Funders do not determine research findings or the insights and recommendations of our experts. 
+                More information on our funding principles is available <a href='https://www.urban.org/support'>here</a>. 
+                Read our terms of service <a href='https://www.urban.org/terms-service'>here</a></i>.</p>"),
+           
+           HTML("Copyright &copy; <a href='https://www.urban.org/'>Urban Institute</a> 2017. View this project on <a href='https://github.com/UI-Research/dynasim-shiny1.git'>GitHub</a>.")
+           )
+    ),
+  
   tags$script(src = "activatePym.js")
 )
 
@@ -169,9 +196,10 @@ server <- function(input, output) {
         geom_hline(yintercept = 0) +
         geom_line(size = 1) +
         scale_y_continuous(limits = c(-1, 1.5)) +
-        labs(title = NULL,
-             x = "Calendar year",
-             y = NULL) + 
+        labs(x = NULL,
+             y = NULL,
+             caption = "DYNASIM3
+                        Urban Institute") + 
         theme(plot.margin = margin(t = -5),
               axis.line = element_blank())
     
@@ -184,9 +212,9 @@ server <- function(input, output) {
         geom_line(size = 1) +
         scale_y_continuous(limits = c(0, 0.31), expand = c(0, 0)) +
         labs(caption = "DYNASIM3
-                        Urban Institute") + 
-        xlab("Calendar year") +
-        ylab(NULL) +
+                        Urban Institute",
+             x = NULL,
+             y = NULL) + 
         theme(plot.margin = margin(t = -5))
     
   })
@@ -198,9 +226,9 @@ server <- function(input, output) {
         geom_hline(yintercept = 0) +
         geom_line(size = 1) +
         labs(caption = "DYNASIM3
-                        Urban Institute") +
-        xlab("Calendar year") +
-        ylab(NULL) +
+                        Urban Institute",
+             x = NULL,
+             y = NULL) + 
         scale_y_continuous(limits = c(-20, 5), labels = scales::percent) +
         theme(plot.margin = margin(t = -5),
               axis.line = element_blank())
@@ -269,22 +297,15 @@ server <- function(input, output) {
     point <- nearPoints(data_subset(), hover, threshold = 20, maxpoints = 1, addDist = TRUE)
     if (nrow(point) == 0) return(NULL)
         
-    # calculate point position inside the image as percent of total dimensions
-    # from left (horizontal) and from top (vertical)
     left_pct <- (hover$x - hover$domain$left) / (hover$domain$right - hover$domain$left)
     top_pct <- (hover$domain$top - hover$y) / (hover$domain$top - hover$domain$bottom)
     
-    # calculate distance from left and bottom side of the picture in pixels
     left_px <- hover$range$left + left_pct * (hover$range$right - hover$range$left)
     top_px <- hover$range$top + top_pct * (hover$range$bottom - hover$range$top)
     
-    # create style property for tooltip
-    # background color is set so tooltip is a bit transparent
-    # z-index is set so we are sure are tooltip will be on top
     style <- paste0("position:absolute; z-index:100; background-color: rgba(245, 245, 245, 0.85); ",
                     "left:", left_px + 2, "px; top:", top_px + 2, "px;")
     
-    # actual tooltip created as wellPanel
     wellPanel(
       style = style,
       p(HTML(paste0("<b> Year:  </b>", point$calendar.year,"<br/>",
@@ -298,8 +319,6 @@ server <- function(input, output) {
     hover <- input$plot_hover2
     point <- nearPoints(data_subset(), hover, threshold = 20, maxpoints = 1, addDist = TRUE)
     if (nrow(point) == 0) return(NULL)
-    
-    print(point)
     
     left_pct <- (hover$x - hover$domain$left) / (hover$domain$right - hover$domain$left)
     top_pct <- (hover$domain$top - hover$y) / (hover$domain$top - hover$domain$bottom)
@@ -324,8 +343,6 @@ server <- function(input, output) {
     point <- nearPoints(data_subset(), hover, threshold = 20, maxpoints = 1, addDist = TRUE)
     if (nrow(point) == 0) return(NULL)
     
-    print(point)
-    
     left_pct <- (hover$x - hover$domain$left) / (hover$domain$right - hover$domain$left)
     top_pct <- (hover$domain$top - hover$y) / (hover$domain$top - hover$domain$bottom)
     
@@ -344,7 +361,7 @@ server <- function(input, output) {
   })
   
   output$download_data <- downloadHandler(
-    filename = function() { paste0(input$option, '.csv') },
+    filename = function() { ifelse(input$option == "NULL", "baselines.csv", paste0(input$option, '.csv')) },
     content = function(file) {
       write_csv(data_subset(), file)
     }
