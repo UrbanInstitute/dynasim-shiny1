@@ -19,8 +19,6 @@ source("urban_institute_themes/urban_theme_windows.R")
 
 latoCSS <- "http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic"
 
-
-
 # Load data and gather data into long form for ggplot2
 solvency_measures <- read_csv("data/solvency_measures.csv", 
                               col_types = cols(
@@ -57,7 +55,7 @@ option_text <- read_csv("text/option.csv",
                         ))
 
 ui <- fluidPage(
-  
+
   tags$head(tags$link(rel = "stylesheet", type = "text/css", href = latoCSS)),
   tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap.css")),
   tags$head(tags$script(src = "pym.min.js")),
@@ -179,7 +177,16 @@ ui <- fluidPage(
                 More information on our funding principles is available <a href='https://www.urban.org/support'>here</a>. 
                 Read our terms of service <a href='https://www.urban.org/terms-service'>here</a></i>.</p>"),
            
-           HTML("Copyright &copy; <a href='https://www.urban.org/'>Urban Institute</a> 2017. View this project on <a href='https://github.com/UI-Research/dynasim-shiny1.git'>GitHub</a>.")
+           h5("RESEARCH"),
+           HTML("<div class='credit-names'><p><a href='https://www.urban.org/author/karen-e-smith'>Karen Smith</a></p></div>"),
+           h5("DESIGN AND DEVELOPMENT"),
+           HTML("<div class='credit-names'><p><a href='https://www.urban.org/author/aaron-r-williams'>Aaron Williams</a>, <a href='https://www.urban.org/author/jerry-ta'>Jerry Ta</a>, and <a href='https://www.urban.org/author/benjamin-chartoff'>Ben Chartoff</a></p></div>"),
+           h5("EDITING"),
+           HTML("<div class='credit-names'><p><a href='https://www.urban.org/author/michael-marazzi'>Michael Marazzi</a></p></div>"),
+           h5("WRITING"),
+           HTML("<div class='credit-names'><p><a href = 'https://www.urban.org/author/karen-e-smith'>Karen Smith</a> and <a href='https://www.urban.org/author/aaron-r-williams'>Aaron Williams</a></p></div>"),
+           
+           HTML("Copyright &copy; <a href='https://www.urban.org/'>Urban Institute</a> 2017. View this project on <a href='https://github.com/urbaninstitute/dynasim-shiny1.git'>GitHub</a>.</p>")
            )
     ),
   
