@@ -47,8 +47,8 @@ combiner <- function(output, var.name) {
   
   output <- output %>%
     gather(key = variable, value = value, -calendar.year) %>%
-    mutate(variable = ifelse(variable == "scheduled", "Scheduled law", variable),
-           variable = ifelse(variable == "payable", "Payable law", variable),
+    mutate(variable = ifelse(variable == "scheduled", "Scheduled", variable),
+           variable = ifelse(variable == "payable", "Payable", variable),
            variable = ifelse(variable == "mini.pia", "Annual primary insurance amount", variable),
            variable = ifelse(variable == "tax.ssb", "Increase benefits taxation", variable),
            variable = ifelse(variable == "cap.spouse", "Cap spouse benefits", variable),
