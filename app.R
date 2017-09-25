@@ -83,26 +83,26 @@ ui <- fluidPage(
       selectInput(inputId = "option", 
         label = "Social Security Reform", 
         choices = c("Scheduled law and payable law" = "NULL",
-                    "BPC package" = "BPC package",
+                    "Bipartisan Policy Center package" = "Bipartisan Policy Center package",
                     "Annual primary insurance amount" = "Annual primary insurance amount",
                     "Basic minimum benefit" = "Basic minimum benefit",
                     "Increase benefits taxation" = "Increase benefits taxation",
                     "Cap spouse benefits" = "Cap spouse benefits",
-                    "75 percent survivor benefit" = "75 percent survivor benefit",
-                    "90 percent tax max" = "90 percent tax max",
+                    "75% survivor benefit" = "75% survivor benefit",
+                    "90% tax max" = "90% tax max",
                     "90% tax max and 13.4% payroll tax" = "90% tax max and 13.4% payroll tax",
                     "Chained-CPI COLA" = "Chained-CPI COLA",
                     "Reduce COLA" = "Reduce COLA",
                     "Cap COLA" = "Cap COLA", 
                     "Increase COLA" = "Increase COLA",
                     "Increase FRA" = "Increase FRA",
-                    "Increase FRA & EEA" = "Increase FRA and EEA",
+                    "Increase FRA and EEA" = "Increase FRA and EEA",
                     "$150,000 tax max" = "$150,000 tax max",
                     "$180,000 tax max" = "$180,000 tax max",
                     "Eliminate the tax max" = "Eliminate the tax max",
-                    "13.4 percent payroll tax" = "13.4 percent payroll tax",
-                    "14.4 percent payroll tax" = "14.4 percent payroll tax",
-                    "15.4 percent payroll tax" = "15.4 percent payroll tax")),
+                    "13.4% payroll tax" = "13.4% payroll tax",
+                    "14.4% payroll tax" = "14.4% payroll tax",
+                    "15.4% payroll tax" = "15.4% payroll tax")),
       
       downloadButton('download_data', 'Download charted data'),
     
@@ -146,7 +146,7 @@ ui <- fluidPage(
   fluidRow(
     column(12,
            h3("Understand the Metrics"),
-           HTML("<p><b>Income-to-cost ratio:</b> Measures the adequacy of current OASDI trust fund income to cover current costs and benefits. The ratio is measured as total OASDI income from payroll taxes, taxation of benefits, general fund transfers, and interest divided by the total cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries.</p>"),  
+           HTML("<p><b>Income-to-cost ratio:</b> Measures the adequacy of current Old Age, Survivor, and Disability Insurance (OASDI) trust fund income to cover current costs and benefits. The ratio is measured as total OASDI income from payroll taxes, taxation of benefits, general fund transfers, and interest divided by the total cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries.</p>"),  
            HTML("<p>When the ratio is one, the Social Security Administration spends one dollar for every dollar it collects or earns from interest. When the ratio is above one, the Social Security Administration brings in more money than it spends and the combined OASDI trust fund grows. When the ratio is below one, the Social Security Administration brings in less money than it spends and the combined OASDI trust fund shrinks.</p>"),
            HTML("<p><b>Annual cost rate (cost-to-taxable payroll ratio):</b> The ratio of the total cost of OASDI programs to all taxable earnings in the economy. The ratio is measured as the cost of scheduled OASDI benefits, administrative expenses, Railroad Retirement program benefits, and payments for vocational rehabilitation services for disabled beneficiaries relative to taxable payroll for the year. The ratio is projected to grow in coming years because the baby boomers will increase the number of beneficiaries more quickly than the growth in taxable payroll.</p>"),
            HTML("<p><b>Trust fund ratio:</b> The percentage of a year’s costs that could be covered solely with money from the combined OASDI trust fund. They are the combined OASDI trust fund asset reserves at the beginning of a year expressed as a percentage of the total cost for the year. A positive trust fund ratio means the combined OASDI trust fund was solvent in the previous year.</p>"),
@@ -187,7 +187,7 @@ ui <- fluidPage(
            h5("WRITING"),
            HTML("<div class='credit-names'><p><a href = 'https://www.urban.org/author/karen-e-smith'>Karen Smith</a> and <a href='https://www.urban.org/author/aaron-r-williams'>Aaron Williams</a></p></div>"),
            
-           HTML("Copyright &copy; <a href='https://www.urban.org/'>Urban Institute</a> 2017. View this project on <a href='https://github.com/urbaninstitute/dynasim-shiny1.git'>GitHub</a>.</p>")
+           HTML("Copyright &copy; <a href='https://www.urban.org/'>Urban Institute</a> September 2017. View this project on <a href='https://github.com/urbaninstitute/dynasim-shiny1.git'>GitHub</a>.</p>")
            )
     ),
   
