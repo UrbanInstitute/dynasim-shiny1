@@ -58,6 +58,7 @@ ui <- fluidPage(
 
   tags$head(tags$link(rel = "stylesheet", type = "text/css", href = latoCSS)),
   tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap.css")),
+  tags$head(tags$base(target = "_blank")),  
   tags$head(tags$script(src = "pym.min.js")),
   
   
@@ -122,14 +123,14 @@ ui <- fluidPage(
            
            h4("Income-to-cost ratio"),
            plotOutput("plot1",
-                      hover = hoverOpts("plot_hover1", delay = 100, delayType = "throttle")),
+                      hover = hoverOpts("plot_hover1", delay = 100, delayType = "debounce")),
            uiOutput("hover_info1"))),
   
   fluidRow(
     column(6, 
            style = "position:relative",
            
-           h4("Annual cost rate (cost-to-taxable payroll ratio)"), 
+           h4("Annual cost rate (cost/taxable payroll)"), 
            plotOutput("plot2",
                       hover = hoverOpts("plot_hover2", delay = 100, delayType = "debounce")),
            uiOutput("hover_info2")),
@@ -197,7 +198,7 @@ server <- function(input, output) {
 
   data_subset <- reactive({
     solvency_measures %>%
-      filter(variable == "Scheduled law" | variable == "Payable law" | variable == input$option)
+      filter(variable == "Scheduled" | variable == "Payable" | variable == input$option)
   })
   
   output$plot1 <- renderPlot({ 
@@ -315,7 +316,7 @@ server <- function(input, output) {
     top_px <- hover$range$top + top_pct * (hover$range$bottom - hover$range$top)
     
     style <- paste0("position:absolute; z-index:100; background-color: rgba(245, 245, 245, 0.85); ",
-                    "left:", left_px + 2, "px; top:", top_px + 2, "px;")
+                    "left:", left_px - 92, "px; top:", top_px + 40, "px; cursor: crosshair;")
     
     wellPanel(
       style = style,
@@ -338,7 +339,7 @@ server <- function(input, output) {
     top_px <- hover$range$top + top_pct * (hover$range$bottom - hover$range$top)
     
     style <- paste0("position:absolute; z-index:100; background-color: rgba(245, 245, 245, 0.85); ",
-                    "left:", left_px + 2, "px; top:", top_px + 2, "px;")
+                    "left:", left_px + 15, "px; top:", top_px + 40, "px; cursor: crosshair;")
     
     wellPanel(
       style = style,
@@ -361,7 +362,7 @@ server <- function(input, output) {
     top_px <- hover$range$top + top_pct * (hover$range$bottom - hover$range$top)
     
     style <- paste0("position:absolute; z-index:100; background-color: rgba(245, 245, 245, 0.85); ",
-                    "left:", left_px + 2, "px; top:", top_px + 2, "px;")
+                    "left:", left_px - 92, "px; top:", top_px + 40, "px; cursor: crosshair;")
     
     wellPanel(
       style = style,
