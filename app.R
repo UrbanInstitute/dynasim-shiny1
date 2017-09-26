@@ -163,10 +163,11 @@ ui <- fluidPage(
            h3("About the data"),
            HTML("<p>The Urban Institute’s Dynamic Simulation of Income Model (DYNASIM) projects the size and characteristics (such as financial, health, and disability status) 
                 of the US population for the next 75 years. Using the best and most recent data available, it helps sort out how profound social, economic, and demographic 
-                shifts will likely affect older adults and their retirement as well astaxpayers, business, and government. The model can also show how outcomes would likely 
+                shifts will likely affect older adults and their retirement as well as taxpayers, business, and government. The model can also show how outcomes would likely 
                 evolve under changes to public policies, business practices, or individual behaviors.</p>"),
            HTML("<p><a href='https://www.urban.org/node/65826'>Read the DYNASIM primer</a></p>"),
-           HTML("<p><a href='https://www.urban.org/research/publication/dynamic-simulation-income-model-dynasim-overview'>Review the DYNASIM documentation</a></p>")
+           HTML("<p><a href='https://www.urban.org/research/publication/dynamic-simulation-income-model-dynasim-overview'>Review the DYNASIM documentation</a></p>"),
+           HTML("<p>Questions about DYNASIM? <a href='mailto:retirementpolicy@urban.org' target='_self'>Contact us</a>.</p>")
            
            ),
     column(6,
@@ -187,7 +188,7 @@ ui <- fluidPage(
            h5("WRITING"),
            HTML("<div class='credit-names'><p><a href = 'https://www.urban.org/author/karen-e-smith'>Karen Smith</a> and <a href='https://www.urban.org/author/aaron-r-williams'>Aaron Williams</a></p></div>"),
            
-           HTML("Copyright &copy; <a href='https://www.urban.org/'>Urban Institute</a> 2017. View this project on <a href='https://github.com/urbaninstitute/dynasim-shiny1.git'>GitHub</a>.</p>")
+           HTML("Copyright &copy; <a href='https://www.urban.org/'>Urban Institute</a> September 2017. View this project on <a href='https://github.com/urbaninstitute/dynasim-shiny1.git'>GitHub</a>.</p>")
            )
     ),
   
