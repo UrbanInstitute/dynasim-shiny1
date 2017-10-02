@@ -1,6 +1,8 @@
 # dynasim-shiny1
 
-Interactive web visualization of DYNASIM projections of combined OASDI trust fund health.  
+Interactive web visualization of DYNASIM projections of combined OASDI trust fund health. [Link!](https://www.urban.org/policy-centers/cross-center-initiatives/program-retirement-policy/projects/dynasim-visualizing-older-americans-future-well-being/fiscal-health-social-security)
+
+![](www/shiny1.png)
 
 ## Data
 
