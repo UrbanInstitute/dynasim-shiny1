@@ -35,3 +35,7 @@ All images and .css go in `www/`
 ## Authors
 * Aaron Williams
 * Karen Smith
+* Ben Chartoff
+* Jerry Ta
+* Michael Marazzi
+* Dave D'Orio
